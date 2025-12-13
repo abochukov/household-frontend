@@ -1,0 +1,103 @@
+@import '../../../assests/styles/variables.scss';
+
+.login-wrapper, .signup-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 350px;
+    margin: 0 auto;
+    
+    height: 100%;
+
+    .login-container, .signup-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        text-align: center;
+        width: 380px;
+        // height: 350px;
+        border-radius: 10px;
+        background-color: white;
+        border: 1px solid #e1e1e1;
+        position: relative;
+        z-index: 99999;
+        padding: 30px 0;
+
+        .form-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            width: 50%;
+
+            i {
+                color: $main-orange;
+            }
+        }
+    }
+}
+
+label {
+    width: 200px;    
+    text-align: left;
+}
+
+.username, .password, .email, .firstname, .lastname, .phone {
+    margin: 10px;
+    text-align: left;
+
+    input {
+        border: 1px solid $border-gray;
+        border-radius: 10px;
+        width: 250px;
+        padding-left: 7px;
+        height: 25px;
+    }
+}
+
+.registrationBtn {
+    margin-top: 20px;
+    border: 1px solid $border-gray;
+}
+
+.login-footer {
+    p {
+        margin: 0;
+    }
+    margin-top: 20px;
+}
+
+.login-button {
+    // border: 1px solid #aeadad
+    border: 1px solid $border-gray;
+}
+
+.password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    // height: 30px;
+  }
+  
+  .password-field {
+    width: 100%;
+    padding: 10px;
+    padding-right: 35px; /* Оставя място за иконата */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #606060;
+  }
+  
+  .toggle-password:hover {
+    color: #383838;
+  }
+  

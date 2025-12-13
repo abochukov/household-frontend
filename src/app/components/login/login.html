@@ -1,0 +1,33 @@
+<div class='login-wrapper'>
+  <div class='login-container'>
+    <div>
+      <h2>Вход</h2>
+    </div>
+    <div class='form-container'>
+      <form [formGroup]="loginForm" (ngSubmit)="submit()">
+        <div class='username'>
+          <label>Email:</label>
+          <input id="email" type="email" formControlName="email">
+          <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            Въведи валиден имейл.
+          </div>
+        </div>
+        <div class='password'>
+          <label>Парола:</label>
+          <input id="password" type="password" formControlName="password">
+          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            Паролата е задължителна.
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="loginForm.invalid" class="login-button">Вход</button>
+      </form>
+    </div>
+
+    <div class='login-footer'>
+      <p>
+        Все още нямаш акаунт?<br/> <a href="/signup">Регистрирай се тук</a>
+      </p>
+    </div>
+  </div>
+</div>
