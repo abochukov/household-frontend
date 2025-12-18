@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { ApiServiceTs } from '../../service/api.service.ts.js';
 
@@ -15,7 +16,11 @@ export class Login {
   loginForm: any;
   message: string = '';
 
-  constructor(private apiService: ApiServiceTs, private fb: FormBuilder) { }
+  constructor(
+    private apiService: ApiServiceTs, 
+    private fb: FormBuilder,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -35,6 +40,8 @@ export class Login {
         .subscribe({
           next: () => {
             console.log('Login successful');
+            // Redirect след успешен login
+            this.router.navigate(['/home']);
           },
           error: () => {
             console.log('Invalid credentials');

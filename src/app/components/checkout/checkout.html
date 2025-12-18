@@ -1,0 +1,20 @@
+<div class="checkout-container">
+  <h2>Каса</h2>
+  
+  <div class="checkout-content">
+    <div class="items-list" *ngIf="items.length > 0; else noItems">
+      <div class="item" *ngFor="let item of items">
+        <span>{{ item.name }}</span>
+        <span>{{ item.price }} лв.</span>
+      </div>
+      
+      <div class="total">
+        <strong>Обща сума: {{ totalAmount }} лв.</strong>
+      </div>
+    </div>
+    
+    <ng-template #noItems>
+      <p class="no-items">Няма добавени артикули</p>
+    </ng-template>
+  </div>
+</div>

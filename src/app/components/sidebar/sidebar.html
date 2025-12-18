@@ -1,0 +1,38 @@
+<div class="sidebar-container" [class.open]="isOpen">
+  <button class="hamburger-menu" *ngIf="!isOpen" (click)="toggleSidebar()">
+    ☰
+  </button>
+
+  <ul>
+    <li>
+      <a routerLink="/home" routerLinkActive="active-link" (click)="closeSidebar()">
+        <span>🏠</span>
+        <span>Начало</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/create-address" routerLinkActive="active-link" (click)="closeSidebar()">
+        <span>🔧</span>
+        <span>Нов адрес</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/create-property" routerLinkActive="active-link" (click)="closeSidebar()">
+        <span>🏘️</span>
+        <span>Нов обект</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/manage" routerLinkActive="active-link" (click)="closeSidebar()">
+        <span>📊</span>
+        <span>Управление</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/checkout" routerLinkActive="active-link" (click)="closeSidebar()">
+        <span>💵</span>
+        <span>Каса</span>
+      </a>
+    </li>
+  </ul>
+</div>

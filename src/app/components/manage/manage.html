@@ -1,0 +1,31 @@
+<div class="manage-container">
+  <h2>Управление</h2>
+  
+  <div class="manage-sections">
+    <div class="section">
+      <h3>Адреси</h3>
+      <div class="section-content" *ngIf="addresses.length > 0; else noAddresses">
+        <div class="item" *ngFor="let address of addresses">
+          <span>{{ address.name }}</span>
+          <button class="edit-btn">Редактирай</button>
+        </div>
+      </div>
+      <ng-template #noAddresses>
+        <p class="no-data">Няма добавени адреси</p>
+      </ng-template>
+    </div>
+
+    <div class="section">
+      <h3>Обекти</h3>
+      <div class="section-content" *ngIf="properties.length > 0; else noProperties">
+        <div class="item" *ngFor="let property of properties">
+          <span>{{ property.name }}</span>
+          <button class="edit-btn">Редактирай</button>
+        </div>
+      </div>
+      <ng-template #noProperties>
+        <p class="no-data">Няма добавени обекти</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

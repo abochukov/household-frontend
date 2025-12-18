@@ -1,0 +1,33 @@
+<div class="home-container">
+  <div class="welcome-section">
+    <h1>Добре дошъл, {{ username }}!</h1>
+    <p>Управлявайте вашите адреси и обекти</p>
+  </div>
+
+  <div class="dashboard-cards">
+    <div class="card">
+      <h3>Общо адреси</h3>
+      <div class="card-value">0</div>
+    </div>
+    
+    <div class="card">
+      <h3>Общо обекти</h3>
+      <div class="card-value">0</div>
+    </div>
+    
+    <div class="card">
+      <h3>Общи приходи</h3>
+      <div class="card-value">0 лв.</div>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <h2>Бързи действия</h2>
+    <div class="actions-grid">
+      <a routerLink="/create-address" class="action-btn">➕ Нов адрес</a>
+      <a routerLink="/create-property" class="action-btn">🏘️ Нов обект</a>
+      <a routerLink="/manage" class="action-btn">📊 Управление</a>
+      <a routerLink="/checkout" class="action-btn">💵 Каса</a>
+    </div>
+  </div>
+</div>
