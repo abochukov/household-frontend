@@ -2,12 +2,14 @@
   <div class="toolbar-panel">
     <ul class="toolbar">
       <li style="position: relative">
-        <span class="user-icon" (click)="handleUserClick()">👤</span>
+        <fa-icon [icon]="faUser" #userIconRef (click)="handleUserClick()"></fa-icon>
         <span style="padding-left: 10px" (click)="handleUserClick()">{{ username }}</span>
-        <div class="dropdown" *ngIf="userDropdownVisible">
+        <div class="dropdown" *ngIf="userDropdownVisible" #userDropdownRef>
           <ul>
             <li>Всички адреси</li>
-            <li>Профил</li>
+            <li>
+              <a routerLink="/userProfile">Профил</a>
+            </li>
             <li (click)="handleSignOut()">Излизане</li>
           </ul>
         </div>

@@ -1,34 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { ApiServiceTs } from '../../service/api.service.ts';
+import { Router, RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faGear, faBell, faUser } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, FontAwesomeModule],
   templateUrl: './header.html',
   styleUrls: ['./header.scss']
 })
 export class Header implements OnInit {
+  @ViewChild('userDropdownRef') userDropdownRef!: ElementRef;
+  @ViewChild('userIconRef') userIconRef!: ElementRef;
+
   userDropdownVisible = false;
   username: string | null = null;
 
-  constructor(
-    private router: Router,
-    private apiService: ApiServiceTs
-  ) {}
+  // FontAwesome icons
+  faGear = faGear;
+  faBell = faBell;
+  faUser = faUser;
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
-    // Вземи user info от сесията
-    this.apiService.getMe().subscribe({
-      next: (user: any) => {
-        this.username = user.email || 'User';
-      },
-      error: () => {
-        this.username = null;
-      }
-    });
+    this.username = localStorage.getItem('username');
+  }
+
+  @HostListener('document:mousedown', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (
+      this.userDropdownRef &&
+      this.userIconRef &&
+      !this.userDropdownRef.nativeElement.contains(event.target) &&
+      !this.userIconRef.nativeElement.contains(event.target)
+    ) {
+      this.userDropdownVisible = false;
+    }
   }
 
   handleUserClick() {
@@ -36,11 +46,9 @@ export class Header implements OnInit {
   }
 
   handleSignOut() {
-    this.apiService.logout().subscribe({
-      next: () => {
-        this.username = null;
-        this.router.navigate(['/login']);
-      }
-    });
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    this.username = null;
+    this.router.navigate(['/']);
   }
 }

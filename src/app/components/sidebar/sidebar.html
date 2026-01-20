@@ -1,36 +1,37 @@
-<div class="sidebar-container" [class.open]="isOpen">
-  <button class="hamburger-menu" *ngIf="!isOpen" (click)="toggleSidebar()">
-    ☰
-  </button>
+<!-- Hamburger Icon for Mobile -->
+<div class="hamburger-menu" *ngIf="!isOpen" (click)="toggleSidebar()">
+  <fa-icon [icon]="faBars"></fa-icon>
+</div>
 
+<div class="sidebar-container" [class.open]="isOpen">
   <ul>
     <li>
-      <a routerLink="/home" routerLinkActive="active-link" (click)="closeSidebar()">
-        <span>🏠</span>
+      <a routerLink="/home" routerLinkActive="active" (click)="closeSidebar()">
+        <fa-icon [icon]="faHouse"></fa-icon>
         <span>Начало</span>
       </a>
     </li>
     <li>
-      <a routerLink="/create-address" routerLinkActive="active-link" (click)="closeSidebar()">
-        <span>🔧</span>
+      <a routerLink="/createAddress" routerLinkActive="active" (click)="closeSidebar()">
+        <fa-icon [icon]="faWrench"></fa-icon>
         <span>Нов адрес</span>
       </a>
     </li>
     <li>
-      <a routerLink="/create-property" routerLinkActive="active-link" (click)="closeSidebar()">
-        <span>🏘️</span>
+      <a routerLink="/createProperty" routerLinkActive="active" (click)="closeSidebar()">
+        <fa-icon [icon]="faHouseFire"></fa-icon>
         <span>Нов обект</span>
       </a>
     </li>
     <li>
-      <a routerLink="/manage" routerLinkActive="active-link" (click)="closeSidebar()">
-        <span>📊</span>
+      <a routerLink="/manage" routerLinkActive="active" (click)="closeSidebar()">
+        <fa-icon [icon]="faBarsProgress"></fa-icon>
         <span>Управление</span>
       </a>
     </li>
     <li>
-      <a routerLink="/checkout" routerLinkActive="active-link" (click)="closeSidebar()">
-        <span>💵</span>
+      <a routerLink="/checkout" routerLinkActive="active" (click)="closeSidebar()">
+        <fa-icon [icon]="faMoneyBill"></fa-icon>
         <span>Каса</span>
       </a>
     </li>
