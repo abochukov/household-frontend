@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-body">
+    <h3 class="card-title">Апартамент #{{ property_number }}</h3>
+    <div class="card-text">
+      <p>Град: <b>{{ city ?? 'няма данни' }}</b></p>
+      <p>Квартал: <b>{{ neighbourhood ?? 'няма данни' }}</b></p>
+      <p>Адрес: <b>{{ address ?? 'няма данни' }}</b></p>
+      <p>Номер на апартамент: <b>{{ property_number ?? 'няма данни' }}</b></p>
+      <p>Етаж: <b>{{ floor ?? 'няма данни' }}</b></p>
+      <p>Брой живущи: <b>{{ member_amount ?? 'няма данни' }}</b></p>
+      <p>
+        Използва ли асансьор: 
+        <span [ngClass]="elevator ? 'badge-yes' : 'badge-no'">
+          {{ elevator ? 'Да' : 'Не' }}
+        </span>
+      </p>
+    </div>
+    <button class="custom-btn" [routerLink]="['/apartament', property_id]">Повече</button>
+  </div>
+</div>

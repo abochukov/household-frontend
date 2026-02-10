@@ -32,8 +32,8 @@ export class Header implements OnInit {
   @HostListener('document:mousedown', ['$event'])
   onClickOutside(event: MouseEvent) {
     if (
-      this.userDropdownRef &&
-      this.userIconRef &&
+      this.userDropdownRef?.nativeElement &&
+      this.userIconRef?.nativeElement &&
       !this.userDropdownRef.nativeElement.contains(event.target) &&
       !this.userIconRef.nativeElement.contains(event.target)
     ) {

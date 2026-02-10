@@ -4,6 +4,8 @@ import { Home } from './components/home/home';
 import { Sidebar } from './components/sidebar/sidebar';
 import { Checkout } from './components/checkout/checkout';
 import { Manage } from './components/manage/manage';
+import { CreateAddress } from './components/create-address/create-address';
+import { CreateProperty } from './components/create-property/create-property';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -11,7 +13,7 @@ export const routes: Routes = [
     { path: 'home', component: Home },
     { path: 'checkout', component: Checkout },
     { path: 'manage', component: Manage },
-    { path: 'create-address', component: Home }, // TODO: Replace with actual component
-    { path: 'create-property', component: Home }, // TODO: Replace with actual component
+    { path: 'create-address', component: CreateAddress },
+    { path: 'create-property', component: CreateProperty },
     { path: '**', redirectTo: '/login' }
 ];

@@ -27,10 +27,6 @@ export class Login {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
-
-    this.apiService.getHello().subscribe(res => {
-      this.message = res;
-    })
   }
 
 

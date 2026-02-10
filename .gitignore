@@ -43,3 +43,5 @@ __screenshots__/
 Thumbs.db
 node_modules/
 dist/
+
+package-lock.json
