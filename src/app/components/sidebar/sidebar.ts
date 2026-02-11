@@ -1,61 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule, NavigationEnd } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { 
-  faHouse, 
-  faWrench, 
-  faHouseFire, 
-  faMoneyBill, 
-  faUser, 
-  faRightFromBracket, 
-  faBarsProgress, 
-  faBars 
-} from '@fortawesome/free-solid-svg-icons';
-import { filter } from 'rxjs/operators';
+import { RouterModule } from '@angular/router';
+import { MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, FontAwesomeModule],
+  imports: [CommonModule, RouterModule, MenuModule],
   templateUrl: './sidebar.html',
   styleUrls: ['./sidebar.scss']
 })
-export class Sidebar implements OnInit {
-  isOpen = false;
+export class Sidebar {
+  menuItems: MenuItem[] = [];
 
-  // FontAwesome icons
-  faHouse = faHouse;
-  faWrench = faWrench;
-  faHouseFire = faHouseFire;
-  faBarsProgress = faBarsProgress;
-  faMoneyBill = faMoneyBill;
-  faUser = faUser;
-  faRightFromBracket = faRightFromBracket;
-  faBars = faBars;
-
-  constructor(private router: Router) {}
-
-  ngOnInit() {
-    // Close sidebar on route change to login/signup/home
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      if (
-        event.url === '/login' ||
-        event.url === '/signup' ||
-        event.url === '/'
-      ) {
-        this.isOpen = false;
+  constructor() {
+    this.menuItems = [
+      {
+        label: 'Начало',
+        icon: 'pi pi-home',
+        routerLink: '/home'
+      },
+      {
+        label: 'Нов адрес',
+        icon: 'pi pi-map-marker',
+        routerLink: '/create-address'
+      },
+      {
+        label: 'Нов обект',
+        icon: 'pi pi-building',
+        routerLink: '/create-property'
+      },
+      {
+        label: 'Управление',
+        icon: 'pi pi-cog',
+        routerLink: '/manage'
+      },
+      {
+        label: 'Каса',
+        icon: 'pi pi-wallet',
+        routerLink: '/checkout'
       }
-    });
-  }
-
-  toggleSidebar() {
-    this.isOpen = !this.isOpen;
-  }
-
-  closeSidebar() {
-    this.isOpen = false;
+    ];
   }
 }

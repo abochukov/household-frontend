@@ -1,116 +1,112 @@
-@import '../../../assests/styles/variables.scss';
-
 .sidebar-container {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 250px;
+  background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%); // Slate 100 to Slate 200
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  border-right: 1px solid #cbd5e1; // Slate 300
+}
+
+.sidebar-header {
+  padding: 2rem 1.5rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid #cbd5e1; // Slate 300
+  
+  h3 {
     margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 250px;
-
-    font-family: $main-font;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #fff;
-
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0 !important;
-    
-        li {
-            border-bottom: 1px solid #fff;
-            padding: 15px 30px;
-
-            a {
-                color: #fff;
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-
-                fa-icon {
-                    margin-right: 10px;
-                }
-            }
-    
-            span {
-                padding-left: 10px;
-                cursor: pointer;
-            }
-
-            a.active {
-                color: #ff6600; 
-                font-weight: bold;
-            }
-        }
-    }
-
-    // On mobile, hide sidebar and show a hamburger icon
-    @media (max-width: 768px) {
-        width: 0;
-        overflow: hidden;
-        position: fixed;
-        top: 0;
-        left: -100%;
-        transition: left 0.3s ease;
-
-        &.open {
-            left: 0;
-            width: 100%;
-        }
-
-        ul {
-            display: flex;
-            flex-direction: column;
-            padding-top: 50px;
-        }
-
-        li {
-            padding: 10px 20px;
-            text-align: center;
-
-            a {
-                padding: 10px;
-                font-size: 18px;
-            }
-        }
-    }
+    color: #1e293b; // Slate 800
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+  }
 }
 
-// Hamburger menu for mobile
-.hamburger-menu {
-    display: none;
-    position: fixed;
-    top: 15px;
-    left: 20px;
-    font-size: 30px;
-    cursor: pointer;
-    z-index: 9999;
-    pointer-events: auto;
-    background: none;
-    border: none;
-    padding: 0;
+::ng-deep {
+  .sidebar-menu {
+    background: transparent !important;
+    border: none !important;
+    padding: 1rem 0.5rem !important;
 
-    fa-icon {
-        color: #ff6600;
-        font-size: 24px;
+    .p-menu-list {
+      padding: 0 !important;
+      margin: 0 !important;
+      list-style: none !important;
     }
 
-    @media (max-width: 768px) {
-        display: block;
+    .p-menu-item {
+        padding: 20px;
+
+        .p-menu-item-label {
+            padding-left: 10px;
+            font-size: 1.125rem;
+        }
     }
+
+    .p-menuitem {
+      margin-bottom: 0.75rem !important;
+      
+      
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    .p-menuitem-link {
+      padding: 1rem 1.5rem !important;
+      color: #475569 !important; // Slate 600
+      border-radius: 8px !important;
+      border: none !important;
+      background: transparent !important;
+      transition: all 0.3s ease !important;
+      display: flex !important;
+      align-items: center !important;
+      margin: 0 0.5rem !important;
+      gap: 0.75rem !important;
+
+      &:hover {
+        background: #cbd5e1 !important; // Slate 300
+        color: #1e293b !important; // Slate 800
+        transform: translateX(4px);
+      }
+
+      &:focus {
+        box-shadow: none !important;
+        outline: none !important;
+      }
+
+      &.router-link-active {
+        background: #cbd5e1 !important; // Slate 300
+        color: #0f172a !important; // Slate 900
+        font-weight: 600 !important;
+        border-left: 4px solid #0f172a !important; // Slate 900
+        padding-left: calc(1.5rem - 4px) !important;
+      }
+    }
+
+    .p-menuitem-icon {
+      margin-right: 0.75rem !important;
+      font-size: 1.25rem !important;
+      color: #64748b !important; // Slate 500
+      width: 1.5rem !important;
+      text-align: center !important;
+    }
+
+    .p-menuitem-text {
+      font-size: 1rem !important;
+      font-weight: 500 !important;
+      color: inherit !important;
+    }
+
+    .p-menuitem-content {
+      display: block !important;
+      margin-bottom: 0.75rem !important;
+    }
+  }
 }
 
-.toggle-button {
-  top: 20px;
-  left: 20px;
-  background-color: #2c3e50;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 999;
-  border-radius: 5px;
-
-  &:hover {
-    background-color: #34495e;
+@media (max-width: 768px) {
+  .sidebar-container {
+    width: 100%;
   }
 }

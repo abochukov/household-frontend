@@ -6,9 +6,23 @@
 /* Import Bootstrap */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
+/* Import PrimeNG Styles from CDN (PrimeNG 21+ no longer includes CSS files) */
+@import url('https://unpkg.com/primeng@latest/resources/themes/lara-light-blue/theme.css');
+@import url('https://unpkg.com/primeng@latest/resources/primeng.min.css');
+@import url('https://unpkg.com/primeicons@latest/primeicons.css');
+
 body {
   margin: 0;
   padding: 0;
+  font-family: 'Nunito', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #1e293b; /* Slate 800 */
+  background-color: #ffffff;
+}
+
+* {
+  font-family: 'Nunito', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 :root {
@@ -16,9 +30,9 @@ body {
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light;
+  color: #1e293b; /* Slate 800 */
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

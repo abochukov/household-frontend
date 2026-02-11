@@ -1,39 +1,6 @@
-<!-- Hamburger Icon for Mobile -->
-<div class="hamburger-menu" *ngIf="!isOpen" (click)="toggleSidebar()">
-  <fa-icon [icon]="faBars"></fa-icon>
-</div>
-
-<div class="sidebar-container" [class.open]="isOpen">
-  <ul>
-    <li>
-      <a routerLink="/home" routerLinkActive="active" (click)="closeSidebar()">
-        <fa-icon [icon]="faHouse"></fa-icon>
-        <span>Начало</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/create-address" routerLinkActive="active" (click)="closeSidebar()">
-        <fa-icon [icon]="faWrench"></fa-icon>
-        <span>Нов адрес</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/create-property" routerLinkActive="active" (click)="closeSidebar()">
-        <fa-icon [icon]="faHouseFire"></fa-icon>
-        <span>Нов обект</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/manage" routerLinkActive="active" (click)="closeSidebar()">
-        <fa-icon [icon]="faBarsProgress"></fa-icon>
-        <span>Управление</span>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/checkout" routerLinkActive="active" (click)="closeSidebar()">
-        <fa-icon [icon]="faMoneyBill"></fa-icon>
-        <span>Каса</span>
-      </a>
-    </li>
-  </ul>
+<div class="sidebar-container">
+  <div class="sidebar-header">
+    <h3>Домова книга</h3>
+  </div>
+  <p-menu [model]="menuItems" styleClass="sidebar-menu"></p-menu>
 </div>
