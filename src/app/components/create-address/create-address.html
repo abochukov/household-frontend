@@ -18,7 +18,7 @@
           <td>{{ address.created_at | date:'dd.MM.yyyy' }}</td>
           <td>
             <button class="custom-btn" (click)="handleEdit(address)">Редактиране</button>
-            <button class="custom-btn-danger" (click)="handleDelete(address.address_id)">Изтриване</button>
+            <button class="custom-btn-danger" (click)="handleDelete(address.address_id!)">Изтриване</button>
           </td>
         </tr>
       </tbody>

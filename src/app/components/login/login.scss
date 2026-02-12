@@ -1,4 +1,4 @@
-@import '../../../assests/styles/variables.scss';
+@use '../../../assests/styles/variables.scss' as *;
 
 .login-wrapper, .signup-wrapper {
     display: flex;

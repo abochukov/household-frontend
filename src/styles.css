@@ -6,10 +6,7 @@
 /* Import Bootstrap */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-/* Import PrimeNG Styles from CDN (PrimeNG 21+ no longer includes CSS files) */
-@import url('https://unpkg.com/primeng@latest/resources/themes/lara-light-blue/theme.css');
-@import url('https://unpkg.com/primeng@latest/resources/primeng.min.css');
-@import url('https://unpkg.com/primeicons@latest/primeicons.css');
+/* NOTE: PrimeNG styles are loaded from angular.json, not here */
 
 body {
   margin: 0;
