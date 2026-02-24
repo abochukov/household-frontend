@@ -7,15 +7,20 @@
       <label>Изберете адрес <span class="required-field">*</span></label>
       <div class="radio-group">
         <div *ngFor="let address of addresses" class="radio-item">
-          <input 
-            type="radio" 
-            [id]="'address-' + address.address_id"
-            [checked]="selectedAddress?.address_id === address.address_id"
-            (change)="handleAddressSelection(address)">
+          <p-radiobutton
+            formControlName="address_id"
+            [inputId]="'address-' + address.address_id"
+            name="address"
+            [value]="address.address_id"
+            (onClick)="handleAddressSelection(address)"
+          ></p-radiobutton>
           <label [for]="'address-' + address.address_id">
             {{ address.city }}, {{ address.address }}, Вход {{ address.entrance }}
           </label>
         </div>
+      </div>
+      <div class="error-message" *ngIf="propertyForm.get('address_id')?.invalid && propertyForm.get('address_id')?.touched">
+        Моля, изберете адрес
       </div>
       <div *ngIf="addresses.length === 0 && !loading" class="no-addresses">
         <p>Няма налични адреси. Моля, създайте адрес първо.</p>

@@ -6,7 +6,8 @@
 /* Import Bootstrap */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-/* NOTE: PrimeNG styles are loaded from angular.json, not here */
+/* PrimeNG v21 theme is configured in app.config.ts via providePrimeNG */
+@import 'primeicons/primeicons.css';
 
 body {
   margin: 0;

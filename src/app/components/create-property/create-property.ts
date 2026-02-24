@@ -7,11 +7,12 @@ import { AddressService, Address } from '../../services/address.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { HttpClientModule } from '@angular/common/http';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-create-property',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RadioButtonModule],
   providers: [PropertyService, AddressService],
   templateUrl: './create-property.html',
   styleUrls: ['./create-property.scss']
@@ -34,6 +35,7 @@ export class CreateProperty implements OnInit {
 
   ngOnInit() {
     this.propertyForm = this.fb.group({
+      address_id: [null, Validators.required],
       property_number: ['', Validators.required],
       floor: ['', Validators.required],
       member_amount: [1, [Validators.required, Validators.min(1)]],
@@ -77,18 +79,29 @@ export class CreateProperty implements OnInit {
 
   handleAddressSelection(address: Address) {
     this.selectedAddress = address;
+    this.propertyForm.patchValue({ address_id: address.address_id });
   }
 
   submitHandler() {
-    if (this.propertyForm.valid && this.selectedAddress) {
+    if (this.propertyForm.valid) {
       if (!this.currentUserEmail) {
         this.toastService.showError('Моля, влезте отново');
         return;
       }
 
+      const selectedAddressId = this.propertyForm.value.address_id;
+      const selectedAddress = this.addresses.find(
+        (address) => address.address_id === selectedAddressId
+      );
+
+      if (!selectedAddress) {
+        this.toastService.showError('Моля, изберете адрес');
+        return;
+      }
+
       const formData = {
         ...this.propertyForm.value,
-        address_id: this.selectedAddress.address_id,
+        address_id: selectedAddress.address_id,
         created_by: this.currentUserEmail
       };
 
@@ -96,7 +109,7 @@ export class CreateProperty implements OnInit {
 
       this.propertyService.createProperty(formData).subscribe({
         next: (newProperty) => {
-          this.propertyForm.reset({ elevator: false, member_amount: 1 });
+          this.propertyForm.reset({ address_id: null, elevator: false, member_amount: 1 });
           this.selectedAddress = null;
           this.loading = false;
           this.toastService.showSuccess('Имотът е създаден успешно!');
@@ -110,7 +123,7 @@ export class CreateProperty implements OnInit {
         }
       });
     } else {
-      if (!this.selectedAddress) {
+      if (this.propertyForm.get('address_id')?.invalid) {
         this.toastService.showError('Моля, изберете адрес');
       } else {
         this.toastService.showError('Моля, попълнете всички задължителни полета');

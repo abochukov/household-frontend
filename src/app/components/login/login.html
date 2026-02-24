@@ -7,7 +7,12 @@
       <form [formGroup]="loginForm" (ngSubmit)="submit()">
         <div class='username'>
           <label>Email:</label>
-          <input id="email" type="email" formControlName="email">
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            [class.input-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+          >
           <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
             Въведи валиден имейл.
           </div>

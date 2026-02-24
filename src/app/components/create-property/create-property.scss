@@ -1,6 +1,6 @@
 .create-property-container {
   padding: 2rem;
-  max-width: 1200px;
+  // max-width: 1200px;
   margin: 0 auto;
 
   .title {
@@ -46,10 +46,6 @@
     align-items: center;
     gap: 0.5rem;
 
-    input[type="radio"] {
-      cursor: pointer;
-    }
-
     label {
       margin: 0;
       cursor: pointer;
@@ -57,10 +53,20 @@
     }
   }
 
+  :host ::ng-deep .p-radiobutton {
+    cursor: pointer;
+  }
+
   .no-addresses {
     text-align: center;
     color: #e74c3c;
     padding: 1rem;
+  }
+
+  .error-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
   }
 }
 

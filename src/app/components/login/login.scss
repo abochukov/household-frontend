@@ -1,14 +1,20 @@
 @use '../../../assests/styles/variables.scss' as *;
 
 .login-wrapper, .signup-wrapper {
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 350px;
-    margin: 0 auto;
-    
+    // width: 350px;
+    // margin: 0 auto;
+    padding: 2rem;
     height: 100%;
+    box-sizing: border-box;
+    // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow:
+  0 10px 15px rgba(0, 0, 0, 0.1),
+  0 4px 6px rgba(0, 0, 0, 0.05);
 
     .login-container, .signup-container {
         display: flex;
@@ -48,12 +54,22 @@ label {
     text-align: left;
 
     input {
-        border: 1px solid $border-gray;
-        border-radius: 10px;
-        width: 250px;
-        padding-left: 7px;
-        height: 25px;
+      width: 250px;
+      height: 25px;
+      // padding-left: 7px;
+      border: 0;
+      border-bottom: 1px solid $border-gray;
+      outline: none;
+
+      &:focus {
+        // background: $border-gray;
+        background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%); // Slate 100 to Slate 20
+      }
     }
+}
+
+input.input-error {
+  border-bottom: 1px solid #ef4444 !important;
 }
 
 .registrationBtn {
