@@ -1,164 +1,75 @@
 <div class="create-property-container">
   <form [formGroup]="propertyForm" (ngSubmit)="submitHandler()">
-    <div class="title">Създаване на нов обект</div>
-    <div class="info">След като създадете обект в секция "управление" имате възможност да редактирате записа.</div>
+    <div class="title">Създаване на нов имот</div>
+    <div class="info">Изберете адрес и попълнете данните за имота.</div>
 
     <div class="address-list">
-      <label>Изберете адрес</label>
+      <label>Изберете адрес <span class="required-field">*</span></label>
       <div class="radio-group">
         <div *ngFor="let address of addresses" class="radio-item">
           <input 
             type="radio" 
             [id]="'address-' + address.address_id"
-            [checked]="selectedAddress?.address === address.address"
+            [checked]="selectedAddress?.address_id === address.address_id"
             (change)="handleAddressSelection(address)">
-          <label [for]="'address-' + address.address_id">{{ address.address }}</label>
+          <label [for]="'address-' + address.address_id">
+            {{ address.city }}, {{ address.address }}, Вход {{ address.entrance }}
+          </label>
         </div>
       </div>
-      <div *ngIf="addresses.length === 0" class="no-addresses">
+      <div *ngIf="addresses.length === 0 && !loading" class="no-addresses">
         <p>Няма налични адреси. Моля, създайте адрес първо.</p>
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group">
-        <label>Град <span class="required-field">*</span></label>
-        <input type="text" formControlName="city">
-      </div>
-
-      <div class="form-group">
-        <label>Квартал</label>
-        <input type="text" formControlName="neighbourhood">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Адрес <span class="required-field">*</span></label>
-        <input type="text" formControlName="address">
-      </div>
-
-      <div class="form-group">
-        <label>Вход <span class="required-field">*</span></label>
-        <input type="text" formControlName="entranceId">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Номер на апартамент <span class="required-field">*</span></label>
-        <input type="text" formControlName="propertyNumber" [class.invalid]="propertyForm.get('propertyNumber')?.invalid && propertyForm.get('propertyNumber')?.touched">
-        <div class="error-message" *ngIf="propertyForm.get('propertyNumber')?.invalid && propertyForm.get('propertyNumber')?.touched">
-          Моля, въведете номер на апартамент
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Етаж</label>
-        <input type="text" formControlName="floor">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Квадратура</label>
-        <input type="text" formControlName="area">
-      </div>
-
-      <div class="form-group">
-        <label>Брой живущи</label>
-        <input type="number" formControlName="memberAmount">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Домашни любимци</label>
-        <select formControlName="pets">
-          <option [value]="false">Не</option>
-          <option [value]="true">Да</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Дава ли се под наем</label>
-        <select formControlName="rent">
-          <option [value]="false">Не</option>
-          <option [value]="true">Да</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Използва ли асансьор</label>
-        <select formControlName="isElevatorUsed">
-          <option [value]="false">Не</option>
-          <option [value]="true">Да</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Телефонен номер <span class="required-field">*</span></label>
-        <input type="text" formControlName="phone" [class.invalid]="propertyForm.get('phone')?.invalid && propertyForm.get('phone')?.touched">
-        <div class="error-message" *ngIf="propertyForm.get('phone')?.invalid && propertyForm.get('phone')?.touched">
-          Моля, въведете телефонен номер
-        </div>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Email <span class="required-field">*</span></label>
-        <input type="email" formControlName="email" [class.invalid]="propertyForm.get('email')?.invalid && propertyForm.get('email')?.touched">
-        <div class="error-message" *ngIf="propertyForm.get('email')?.invalid && propertyForm.get('email')?.touched">
-          Моля, въведете валиден email
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Потребителско име <span class="required-field">*</span></label>
-        <input type="text" formControlName="username" [class.invalid]="propertyForm.get('username')?.invalid && propertyForm.get('username')?.touched">
-        <div class="error-message" *ngIf="propertyForm.get('username')?.invalid && propertyForm.get('username')?.touched">
-          Моля, въведете потребителско име
-        </div>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Парола <span class="required-field">*</span></label>
-        <input type="password" formControlName="password" [class.invalid]="propertyForm.get('password')?.invalid && propertyForm.get('password')?.touched">
-        <div class="error-message" *ngIf="propertyForm.get('password')?.invalid && propertyForm.get('password')?.touched">
-          Моля, въведете парола
-        </div>
-      </div>
-    </div>
-
-    <div class="residents-form">
-      <div *ngFor="let resident of residents; let i = index" class="resident-item">
-        <label>Живущ {{ i + 1 }}</label>
+        <label>Номер на имот <span class="required-field">*</span></label>
         <input 
           type="text" 
-          placeholder="Име"
-          [value]="resident.name"
-          (input)="handleResidentChange(i, 'name', $any($event.target).value)">
+          formControlName="property_number" 
+          [class.invalid]="propertyForm.get('property_number')?.invalid && propertyForm.get('property_number')?.touched">
+        <div class="error-message" *ngIf="propertyForm.get('property_number')?.invalid && propertyForm.get('property_number')?.touched">
+          Моля, въведете номер на имот
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Етаж <span class="required-field">*</span></label>
         <input 
-          type="date" 
-          placeholder="Рожденна дата"
-          [value]="resident.birthday"
-          (input)="handleResidentChange(i, 'birthday', $any($event.target).value)">
+          type="number" 
+          formControlName="floor"
+          [class.invalid]="propertyForm.get('floor')?.invalid && propertyForm.get('floor')?.touched">
+        <div class="error-message" *ngIf="propertyForm.get('floor')?.invalid && propertyForm.get('floor')?.touched">
+          Моля, въведете етаж
+        </div>
       </div>
     </div>
 
-    <button type="button" class="custom-btn" (click)="addResident()" [disabled]="residents.length >= 6">
-      Добави живущ
-    </button>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Брой живущи <span class="required-field">*</span></label>
+        <input 
+          type="number" 
+          formControlName="member_amount"
+          [class.invalid]="propertyForm.get('member_amount')?.invalid && propertyForm.get('member_amount')?.touched">
+        <div class="error-message" *ngIf="propertyForm.get('member_amount')?.invalid && propertyForm.get('member_amount')?.touched">
+          Моля, въведете брой живущи (минимум 1)
+        </div>
+      </div>
 
-    <div class="buttons">
-      <button type="submit" class="custom-btn-success" [disabled]="propertyForm.invalid || !selectedAddress">
-        Запази
-      </button>
+      <div class="form-group">
+        <label>Използва ли асансьор</label>
+        <select formControlName="elevator">
+          <option [value]="false">Не</option>
+          <option [value]="true">Да</option>
+        </select>
+      </div>
     </div>
+
+    <button type="submit" class="custom-btn-success" [disabled]="propertyForm.invalid || !selectedAddress || loading">
+      Запази
+    </button>
   </form>
 </div>
+
