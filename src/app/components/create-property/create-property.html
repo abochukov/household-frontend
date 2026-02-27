@@ -64,10 +64,42 @@
       </div>
 
       <div class="form-group">
+        <label>Площ (кв.м) <span class="required-field">*</span></label>
+        <input
+          type="number"
+          formControlName="area"
+          [class.invalid]="propertyForm.get('area')?.invalid && propertyForm.get('area')?.touched"
+        >
+        <div class="error-message" *ngIf="propertyForm.get('area')?.invalid && propertyForm.get('area')?.touched">
+          Моля, въведете площ (минимум 1)
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Домашни любимци</label>
+        <select formControlName="pets">
+          <option [ngValue]="false">Не</option>
+          <option [ngValue]="true">Да</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Дава ли се под наем</label>
+        <select formControlName="rent">
+          <option [ngValue]="false">Не</option>
+          <option [ngValue]="true">Да</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
         <label>Използва ли асансьор</label>
         <select formControlName="elevator">
-          <option [value]="false">Не</option>
-          <option [value]="true">Да</option>
+          <option [ngValue]="false">Не</option>
+          <option [ngValue]="true">Да</option>
         </select>
       </div>
     </div>

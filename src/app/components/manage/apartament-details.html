@@ -1,0 +1,38 @@
+<div class="manage-container">
+  <h2>Детайли за апартамент</h2>
+
+  <div *ngIf="loading" class="no-data">
+    <p>Зареждане...</p>
+  </div>
+
+  <div *ngIf="!loading && apartament" class="details-card">
+    <p>Град: <b>{{ apartament.city ?? 'няма данни' }}</b></p>
+    <p>Квартал: <b>{{ apartament.neighbourhood ?? 'няма данни' }}</b></p>
+    <p>Адрес: <b>{{ apartament.address ?? 'няма данни' }}</b></p>
+    <p>Вход: <b>{{ apartament.entrance ?? 'няма данни' }}</b></p>
+    <p>Номер на апартамент: <b>{{ apartament.property_number }}</b></p>
+    <p>Етаж: <b>{{ apartament.floor }}</b></p>
+    <p>Площ: <b>{{ apartament.area }}</b></p>
+    <p>Брой живущи: <b>{{ apartament.member_amount }}</b></p>
+    <p>
+      Домашни любимци:
+      <span [ngClass]="apartament.pets ? 'badge-yes' : 'badge-no'">
+        {{ apartament.pets ? 'Да' : 'Не' }}
+      </span>
+    </p>
+    <p>
+      Дава ли се под наем:
+      <span [ngClass]="apartament.rent ? 'badge-yes' : 'badge-no'">
+        {{ apartament.rent ? 'Да' : 'Не' }}
+      </span>
+    </p>
+    <p>
+      Използва ли асансьор:
+      <span [ngClass]="apartament.elevator ? 'badge-yes' : 'badge-no'">
+        {{ apartament.elevator ? 'Да' : 'Не' }}
+      </span>
+    </p>
+
+    <button class="custom-btn" [routerLink]="['/manage']">Назад</button>
+  </div>
+</div>

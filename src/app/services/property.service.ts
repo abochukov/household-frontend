@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Property {
   property_id?: number;
   address_id: number;
   property_number: string;
   floor: number;
+  area: number;
   member_amount: number;
+  pets?: boolean;
+  rent?: boolean;
   elevator: boolean;
   created_at?: string;
   created_by?: string;
@@ -22,7 +26,7 @@ export interface Property {
   providedIn: 'root'
 })
 export class PropertyService {
-  private apiUrl = 'http://localhost:3000/api/property';
+  private apiUrl = `${environment.apiBaseUrl}/api/property`;
 
   constructor(private http: HttpClient) {}
 
@@ -36,7 +40,10 @@ export class PropertyService {
     address_id: number;
     property_number: string;
     floor: number;
+    area: number;
     member_amount: number;
+    pets?: boolean;
+    rent?: boolean;
     elevator: boolean;
     created_by: string;
   }): Observable<Property> {

@@ -38,7 +38,10 @@ export class CreateProperty implements OnInit {
       address_id: [null, Validators.required],
       property_number: ['', Validators.required],
       floor: ['', Validators.required],
+      area: [null, [Validators.required, Validators.min(1)]],
       member_amount: [1, [Validators.required, Validators.min(1)]],
+      pets: [false],
+      rent: [false],
       elevator: [false]
     });
 
@@ -109,7 +112,14 @@ export class CreateProperty implements OnInit {
 
       this.propertyService.createProperty(formData).subscribe({
         next: (newProperty) => {
-          this.propertyForm.reset({ address_id: null, elevator: false, member_amount: 1 });
+          this.propertyForm.reset({
+            address_id: null,
+            area: null,
+            elevator: false,
+            pets: false,
+            rent: false,
+            member_amount: 1,
+          });
           this.selectedAddress = null;
           this.loading = false;
           this.toastService.showSuccess('Имотът е създаден успешно!');
