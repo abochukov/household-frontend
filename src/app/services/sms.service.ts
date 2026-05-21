@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from '../config/api.config';
 
 interface SmsResponse {
   success: boolean;
@@ -12,7 +13,7 @@ interface SmsResponse {
   providedIn: 'root',
 })
 export class SmsService {
-  private apiUrl = 'http://localhost:3000/api/sms';
+  private apiUrl = `${API_BASE_URL}/api/sms`;
 
   constructor(private http: HttpClient) {}
 
