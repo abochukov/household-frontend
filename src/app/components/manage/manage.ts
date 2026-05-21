@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ApartamentListItem } from './apartament-list-item';
 import { PropertyService, Property } from '../../services/property.service';
+import { AddressService, Address } from '../../services/address.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 
@@ -16,11 +17,14 @@ import { ToastService } from '../../services/toast.service';
 })
 export class Manage implements OnInit {
   apartaments: Property[] = [];
+  addresses: Address[] = [];
   loading: boolean = false;
   currentUserEmail: string = '';
+  selectedAddressId: number | null = null;
   
   constructor(
     private propertyService: PropertyService,
+    private addressService: AddressService,
     private userService: UserService,
     private toastService: ToastService,
     private router: Router
@@ -32,6 +36,7 @@ export class Manage implements OnInit {
       next: (user) => {
         this.currentUserEmail = user.email;
         this.loadProperties();
+        this.loadAddresses();
       },
       error: (err) => {
         console.error('Error getting user:', err);
@@ -60,5 +65,38 @@ export class Manage implements OnInit {
         }
       });
     }
+  }
+
+  loadAddresses() {
+    if (this.currentUserEmail) {
+      this.addressService.getAddressesForUser(this.currentUserEmail).subscribe({
+        next: (data) => {
+          this.addresses = data;
+        },
+        error: (err) => {
+          console.error('Error loading addresses:', err);
+          this.toastService.showError('Грешка при зареждане на адресите');
+        }
+      });
+    }
+  }
+
+  onAddressFilterChange(value: string) {
+    const parsed = Number(value);
+    this.selectedAddressId = Number.isNaN(parsed) ? null : parsed;
+  }
+
+  clearFilters() {
+    this.selectedAddressId = null;
+  }
+
+  get filteredApartaments(): Property[] {
+    if (this.selectedAddressId == null) {
+      return this.apartaments;
+    }
+
+    return this.apartaments.filter(
+      (apartament) => apartament.address_id === this.selectedAddressId,
+    );
   }
 }

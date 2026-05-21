@@ -65,6 +65,23 @@
 
     <div class="form-row">
       <div class="form-group">
+        <label>% идеални части</label>
+        <input
+          type="number"
+          formControlName="ideal_share"
+          min="0"
+          max="100"
+          step="0.01"
+          [class.invalid]="propertyForm.get('ideal_share')?.invalid && propertyForm.get('ideal_share')?.touched"
+        >
+        <div class="error-message" *ngIf="propertyForm.get('ideal_share')?.invalid && propertyForm.get('ideal_share')?.touched">
+          Моля, въведете стойност между 0 и 100
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
         <label>Домашни любимци</label>
         <select formControlName="pets">
           <option [ngValue]="false">Не</option>

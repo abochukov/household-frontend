@@ -16,6 +16,7 @@ export class ApartamentListItem {
   @Input() property_id?: number;
   @Input() property_number?: string;
   @Input() floor?: number;
+  @Input() ideal_share?: number;
   @Input() member_amount?: number;
   @Input() pets?: boolean;
   @Input() rent?: boolean;

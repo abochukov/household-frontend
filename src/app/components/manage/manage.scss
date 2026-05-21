@@ -7,6 +7,41 @@
   }
 }
 
+.filters {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-size: 0.9rem;
+    color: #2c3e50;
+    margin-bottom: 6px;
+  }
+
+  select {
+    min-width: 280px;
+    border: 1px solid #cfd8e3;
+    border-radius: 6px;
+    padding: 8px 10px;
+    background-color: #fff;
+  }
+}
+
+.clear-btn {
+  border: 1px solid #6c757d;
+  background-color: #fff;
+  color: #34495e;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background-color: #f3f6f9;
+}
+
 .apartament-list {
   display: flex;
   flex-wrap: wrap;

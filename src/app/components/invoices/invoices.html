@@ -1,6 +1,17 @@
 <div class="invoices-container">
 	<h2>Фактуриране</h2>
 
+	<app-address-list
+		[addresses]="addresses"
+		[loading]="loading"
+		[control]="addressControl"
+		[required]="true"
+		label="Изберете адрес"
+		validationMessage="Моля, изберете адрес"
+		emptyMessage="Няма налични адреси. Моля, създайте адрес първо."
+		(addressSelected)="handleAddressSelection($event)"
+	></app-address-list>
+
 	<app-month-tabs
 		[tabs]="tabs"
 		[activeTab]="activeTab"
@@ -71,7 +82,7 @@
 			</table>
 		} @else {
 			<p class="no-data">
-				{{ loading ? 'Зареждане...' : 'Няма апартаменти за избрания период.' }}
+				{{ loading ? 'Зареждане...' : getNoDataMessage() }}
 			</p>
 		}
 	</div>

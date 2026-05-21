@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { AddressService, Address } from '../../services/address.service';
 import { Property, PropertyService } from '../../services/property.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
+import { AddressListComponent } from '../shared/address-list/address-list';
 import { MonthTabItem, MonthTabsComponent } from '../shared/month-tabs/month-tabs';
+import { AddressListItem } from '../../shared/models/address-list-item';
 
 type TabKey =
   | 'january'
@@ -39,11 +42,14 @@ interface InvoiceRow {
 @Component({
   selector: 'app-invoices',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, MonthTabsComponent],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, AddressListComponent, MonthTabsComponent],
   templateUrl: './invoices.html',
   styleUrls: ['./invoices.css'],
 })
 export class Invoices {
+  addressControl: FormControl<number | null>;
+  addresses: Address[] = [];
+  selectedAddress: Address | null = null;
   loading = false;
   currentUserEmail = '';
   allProperties: Property[] = [];
@@ -71,10 +77,13 @@ export class Invoices {
 
   constructor(
     private fb: FormBuilder,
+    private addressService: AddressService,
     private propertyService: PropertyService,
     private userService: UserService,
     private toastService: ToastService,
   ) {
+    this.addressControl = this.fb.control<number | null>(null, Validators.required);
+
     this.chargesForm = this.fb.group({
       cleaner: [0, [Validators.min(0)]],
       elevatorSubscription: [0, [Validators.min(0)]],
@@ -92,6 +101,7 @@ export class Invoices {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
         this.currentUserEmail = user.email;
+        this.loadAddresses();
         this.loadProperties();
       },
       error: (err) => {
@@ -103,6 +113,14 @@ export class Invoices {
         this.toastService.showError('Грешка при зареждане на потребителя');
       },
     });
+  }
+
+  handleAddressSelection(address: AddressListItem) {
+    this.selectedAddress = this.addresses.find(
+      (item) => item.address_id === address.address_id,
+    ) || null;
+
+    this.rebuildRows();
   }
 
   onTabChange(tabValue: string) {
@@ -133,10 +151,34 @@ export class Invoices {
     });
   }
 
+  private loadAddresses() {
+    if (!this.currentUserEmail) {
+      return;
+    }
+
+    this.loading = true;
+    this.addressService.getAddressesForUser(this.currentUserEmail).subscribe({
+      next: (addresses) => {
+        this.addresses = addresses;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.toastService.showError('Грешка при зареждане на адресите');
+      },
+    });
+  }
+
   private rebuildRows() {
+    if (!this.selectedAddress || this.selectedAddress.address_id == null) {
+      this.rows = [];
+      return;
+    }
+
     const properties = this.getPropertiesForActiveTab();
 
     const totalResidents = properties.reduce((sum, p) => sum + Number(p.member_amount || 0), 0);
+    const totalIdealShare = properties.reduce((sum, p) => sum + Number(p.ideal_share || 0), 0);
     const elevatorProperties = properties.filter((p) => !!p.elevator);
     const totalElevatorResidents = elevatorProperties.reduce(
       (sum, p) => sum + Number(p.member_amount || 0),
@@ -149,8 +191,11 @@ export class Invoices {
     const stairsElectricityTotal = Number(this.chargesForm.value.stairsElectricity || 0);
     const majorRepairTotal = Number(this.chargesForm.value.majorRepair || 0);
 
-    this.rows = properties.map((property) => {
+    this.rows = properties
+      .sort((a, b) => this.compareApartmentNumber(a.property_number, b.property_number))
+      .map((property) => {
       const residents = Number(property.member_amount || 0);
+      const idealShare = Number(property.ideal_share || 0);
       const isElevatorUser = !!property.elevator;
 
       const cleaner = this.byResidents(cleanerTotal, residents, totalResidents);
@@ -161,7 +206,7 @@ export class Invoices {
         ? this.byResidents(elevatorElectricityTotal, residents, totalElevatorResidents)
         : 0;
       const stairsElectricity = this.byResidents(stairsElectricityTotal, residents, totalResidents);
-      const majorRepair = this.byResidents(majorRepairTotal, residents, totalResidents);
+      const majorRepair = this.byIdealShare(majorRepairTotal, idealShare, totalIdealShare);
 
       const total =
         cleaner +
@@ -185,12 +230,28 @@ export class Invoices {
   }
 
   private getPropertiesForActiveTab(): Property[] {
+    if (!this.selectedAddress || this.selectedAddress.address_id == null) {
+      return [];
+    }
+
+    const byAddress = this.allProperties.filter(
+      (property) => property.address_id === this.selectedAddress?.address_id,
+    );
+
     if (this.activeTab === 'total') {
-      return this.allProperties;
+      return byAddress;
     }
 
     const monthTab: MonthTabKey = this.activeTab;
-    return this.allProperties.filter((p) => this.isInMonth(p.created_at, monthTab));
+    return byAddress.filter((p) => this.isInMonth(p.created_at, monthTab));
+  }
+
+  getNoDataMessage(): string {
+    if (!this.selectedAddress) {
+      return 'Изберете адрес, за да заредите апартаментите.';
+    }
+
+    return 'Няма апартаменти за избрания период.';
   }
 
   private isInMonth(createdAt: string | undefined, tab: MonthTabKey): boolean {
@@ -231,6 +292,18 @@ export class Invoices {
     }
 
     return (total * residents) / totalResidents;
+  }
+
+  private byIdealShare(total: number, idealShare: number, totalIdealShare: number): number {
+    if (!totalIdealShare) {
+      return 0;
+    }
+
+    return (total * idealShare) / totalIdealShare;
+  }
+
+  private compareApartmentNumber(a: string, b: string): number {
+    return String(a ?? '').localeCompare(String(b ?? ''), undefined, { numeric: true, sensitivity: 'base' });
   }
 
 }
