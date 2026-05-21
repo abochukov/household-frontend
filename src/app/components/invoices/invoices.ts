@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { HttpClientModule } from '@angular/common/http';
 import { AddressService, Address } from '../../services/address.service';
 import { Property, PropertyService } from '../../services/property.service';
-import { MonthColumn, TotalSumService, YearlyTotalRow } from '../../services/total-sum.service';
+import { MonthCharges, MonthColumn, TotalSumService, YearlyTotalRow } from '../../services/total-sum.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { AddressListComponent } from '../shared/address-list/address-list';
@@ -55,11 +55,13 @@ export class Invoices {
   loading = false;
   saving = false;
   loadingTotals = false;
+  loadingMonthCharges = false;
   currentUserEmail = '';
   currentYear = new Date().getFullYear();
   allProperties: Property[] = [];
   rows: InvoiceRow[] = [];
   yearlyTotals: YearlyTotalRow[] = [];
+  payingPropertyIds = new Set<number>();
 
   tabs: MonthTabItem[] = [
     { label: 'Януари', value: 'january' },
@@ -128,9 +130,10 @@ export class Invoices {
     ) || null;
 
     this.rebuildRows();
+    this.loadYearlyTotals();
 
-    if (this.activeTab === 'total') {
-      this.loadYearlyTotals();
+    if (this.activeTab !== 'total') {
+      this.loadMonthCharges(this.activeTab as MonthTabKey);
     }
   }
 
@@ -140,9 +143,13 @@ export class Invoices {
     }
 
     this.activeTab = tabValue as TabKey;
+    if (this.activeTab !== 'total') {
+      this.loadMonthCharges(this.activeTab as MonthTabKey);
+    }
+
     this.rebuildRows();
 
-    if (this.activeTab === 'total') {
+    if (this.yearlyTotals.length === 0 || this.activeTab === 'total') {
       this.loadYearlyTotals();
     }
   }
@@ -295,6 +302,7 @@ export class Invoices {
       year: this.currentYear,
       month: month as MonthColumn,
       rows: payloadRows,
+      charges: this.getCurrentCharges(),
     }).subscribe({
       next: () => {
         this.saving = false;
@@ -340,6 +348,152 @@ export class Invoices {
         this.toastService.showError('Грешка при зареждане на общите суми');
       },
     });
+  }
+
+  private loadMonthCharges(month: MonthTabKey) {
+    if (!this.currentUserEmail || !this.selectedAddress?.address_id) {
+      return;
+    }
+
+    this.loadingMonthCharges = true;
+    this.totalSumService.getMonthCharges(
+      this.currentUserEmail,
+      this.selectedAddress.address_id,
+      this.currentYear,
+      month as MonthColumn,
+    ).subscribe({
+      next: (charges) => {
+        this.loadingMonthCharges = false;
+        this.chargesForm.patchValue(charges, { emitEvent: true });
+      },
+      error: () => {
+        this.loadingMonthCharges = false;
+        this.toastService.showError('Грешка при зареждане на месечните параметри');
+      },
+    });
+  }
+
+  payForRow(row: InvoiceRow) {
+    if (this.activeTab === 'total') {
+      return;
+    }
+
+    if (!this.currentUserEmail || !this.selectedAddress?.address_id) {
+      this.toastService.showError('Изберете адрес и влезте в системата');
+      return;
+    }
+
+    const month = this.activeTab as MonthTabKey;
+    const alreadyPaid = this.isMonthPaidForProperty(row.propertyId, month);
+
+    if (alreadyPaid) {
+      this.toastService.showSuccess('Задължението вече е платено');
+      return;
+    }
+
+    this.payingPropertyIds.add(row.propertyId);
+    this.totalSumService.payMonth({
+      username: this.currentUserEmail,
+      address_id: this.selectedAddress.address_id,
+      property_id: row.propertyId,
+      year: this.currentYear,
+      month: month as MonthColumn,
+      paid_by: this.currentUserEmail,
+    }).subscribe({
+      next: (result) => {
+        this.payingPropertyIds.delete(row.propertyId);
+        this.toastService.showSuccess(
+          result.already_paid ? 'Задължението вече е било платено' : 'Плащането е записано успешно',
+        );
+        this.loadYearlyTotals();
+      },
+      error: (error) => {
+        this.payingPropertyIds.delete(row.propertyId);
+        const message = error?.error?.message;
+        this.toastService.showError(message || 'Грешка при запис на плащането');
+      },
+    });
+  }
+
+  isPayDisabled(row: InvoiceRow): boolean {
+    if (this.activeTab === 'total') {
+      return true;
+    }
+
+    const month = this.activeTab as MonthTabKey;
+    const paid = this.isMonthPaidForProperty(row.propertyId, month);
+
+    if (this.payingPropertyIds.has(row.propertyId)) {
+      return true;
+    }
+
+    return paid;
+  }
+
+  getPayLabel(row: InvoiceRow): string {
+    if (this.activeTab === 'total') {
+      return 'Плати';
+    }
+
+    if (this.payingPropertyIds.has(row.propertyId)) {
+      return 'Плащане...';
+    }
+
+    const month = this.activeTab as MonthTabKey;
+    const paid = this.isMonthPaidForProperty(row.propertyId, month);
+
+    if (paid) {
+      return 'Платено';
+    }
+
+    return 'Плати';
+  }
+
+  isMonthPaidForTotalRow(row: YearlyTotalRow, month: MonthTabKey): boolean {
+    const key = `paid_${month}` as keyof YearlyTotalRow;
+    const value = row[key];
+
+    return value === true || value === 'true' || value === 't' || value === 1;
+  }
+
+  getTotalMonthCellClass(row: YearlyTotalRow, month: MonthTabKey): string {
+    const monthAmount = this.getMonthAmountForTotalRow(row, month);
+
+    if (monthAmount === null) {
+      return '';
+    }
+
+    return this.isMonthPaidForTotalRow(row, month) ? 'paid-cell' : 'unpaid-cell';
+  }
+
+  private isMonthPaidForProperty(propertyId: number, month: MonthTabKey): boolean {
+    const row = this.yearlyTotals.find((item) => Number(item.property_id) === Number(propertyId));
+    return row ? this.isMonthPaidForTotalRow(row, month) : false;
+  }
+
+  private getMonthAmountForTotalRow(row: YearlyTotalRow, month: MonthTabKey): number | null {
+    const value = row[month];
+
+    if (typeof value === 'number') {
+      return Number.isNaN(value) ? null : value;
+    }
+
+    if (typeof value === 'string') {
+      const parsed = Number(value);
+      return Number.isNaN(parsed) ? null : parsed;
+    }
+
+    return null;
+  }
+
+  private getCurrentCharges(): MonthCharges {
+    return {
+      cleaner: Number(this.chargesForm.value.cleaner || 0),
+      elevatorSubscription: Number(this.chargesForm.value.elevatorSubscription || 0),
+      elevatorElectricity: Number(this.chargesForm.value.elevatorElectricity || 0),
+      stairsElectricity: Number(this.chargesForm.value.stairsElectricity || 0),
+      majorRepair: Number(this.chargesForm.value.majorRepair || 0),
+    };
   }
 
   get isTotalTab(): boolean {

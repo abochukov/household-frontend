@@ -83,7 +83,16 @@
 							<td>{{ row.stairsElectricity | number: '1.2-2' }}</td>
 							<td>{{ row.majorRepair | number: '1.2-2' }}</td>
 							<td class="total">{{ row.total | number: '1.2-2' }}</td>
-							<td><button type="button" class="pay-btn">Плати</button></td>
+							<td>
+								<button
+									type="button"
+									class="pay-btn"
+									(click)="payForRow(row)"
+									[disabled]="isPayDisabled(row)"
+								>
+									{{ getPayLabel(row) }}
+								</button>
+							</td>
 						</tr>
 					}
 				</tbody>
@@ -106,29 +115,29 @@
 						<th>Ноември</th>
 						<th>Декември</th>
 						<th>Брой месеци</th>
+						<th>Платени месеци</th>
 						<th>Общо</th>
-						<th>Плати</th>
 					</tr>
 				</thead>
 				<tbody>
 					@for(row of yearlyTotals; track row.property_id) {
 						<tr>
 							<td>{{ row.property_number }}</td>
-							<td>{{ row.january == null ? '-' : (row.january | number: '1.2-2') }}</td>
-							<td>{{ row.february == null ? '-' : (row.february | number: '1.2-2') }}</td>
-							<td>{{ row.march == null ? '-' : (row.march | number: '1.2-2') }}</td>
-							<td>{{ row.april == null ? '-' : (row.april | number: '1.2-2') }}</td>
-							<td>{{ row.may == null ? '-' : (row.may | number: '1.2-2') }}</td>
-							<td>{{ row.june == null ? '-' : (row.june | number: '1.2-2') }}</td>
-							<td>{{ row.july == null ? '-' : (row.july | number: '1.2-2') }}</td>
-							<td>{{ row.august == null ? '-' : (row.august | number: '1.2-2') }}</td>
-							<td>{{ row.september == null ? '-' : (row.september | number: '1.2-2') }}</td>
-							<td>{{ row.october == null ? '-' : (row.october | number: '1.2-2') }}</td>
-							<td>{{ row.november == null ? '-' : (row.november | number: '1.2-2') }}</td>
-							<td>{{ row.december == null ? '-' : (row.december | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'january')">{{ row.january == null ? '-' : (row.january | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'february')">{{ row.february == null ? '-' : (row.february | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'march')">{{ row.march == null ? '-' : (row.march | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'april')">{{ row.april == null ? '-' : (row.april | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'may')">{{ row.may == null ? '-' : (row.may | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'june')">{{ row.june == null ? '-' : (row.june | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'july')">{{ row.july == null ? '-' : (row.july | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'august')">{{ row.august == null ? '-' : (row.august | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'september')">{{ row.september == null ? '-' : (row.september | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'october')">{{ row.october == null ? '-' : (row.october | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'november')">{{ row.november == null ? '-' : (row.november | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'december')">{{ row.december == null ? '-' : (row.december | number: '1.2-2') }}</td>
 							<td>{{ row.month_amount ?? 0 }}</td>
+							<td>{{ row.paid_months }}</td>
 							<td class="total">{{ row.total_sum == null ? '-' : (row.total_sum | number: '1.2-2') }}</td>
-							<td><button type="button" class="pay-btn">Плати</button></td>
 						</tr>
 					}
 				</tbody>
