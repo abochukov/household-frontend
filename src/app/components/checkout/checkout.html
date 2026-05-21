@@ -1,20 +1,59 @@
 <div class="checkout-container">
   <h2>Каса</h2>
-  
+
+  <div class="address-box">
+    <label for="checkout-address">Изберете адрес</label>
+    <select
+      id="checkout-address"
+      [disabled]="loading"
+      [value]="addressControl.value ?? ''"
+      (change)="handleAddressSelection($any($event.target).value)"
+    >
+      <option value="">-- изберете --</option>
+      <option *ngFor="let address of addresses" [value]="address.address_id">
+        {{ address.city }}, {{ address.address }}, вход {{ address.entrance }}
+      </option>
+    </select>
+  </div>
+
+  <div class="tabs-wrap">
+    <button
+      type="button"
+      *ngFor="let tab of tabs"
+      class="tab-button"
+      [class.active]="activeTab === tab.value"
+      (click)="onTabChange(tab.value)"
+    >
+      {{ tab.label }}
+    </button>
+  </div>
+
   <div class="checkout-content">
-    <div class="items-list" *ngIf="items.length > 0; else noItems">
-      <div class="item" *ngFor="let item of items">
-        <span>{{ item.name }}</span>
-        <span>{{ item.price }} лв.</span>
-      </div>
-      
-      <div class="total">
-        <strong>Обща сума: {{ totalAmount }} лв.</strong>
-      </div>
+    <div class="table-card" *ngIf="tableRows.length > 0; else noRows">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Апартамент</th>
+            <th>Брой живущи</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of tableRows">
+            <td>{{ row.apartment }}</td>
+            <td>{{ row.residents }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    
-    <ng-template #noItems>
-      <p class="no-items">Няма добавени артикули</p>
+
+    <ng-template #noRows>
+      <p class="no-items">{{ getNoDataMessage() }}</p>
     </ng-template>
+
+    <div class="checkout-actions">
+      <button type="button" class="sms-btn" [disabled]="smsSending" (click)="sendTestSms()">
+        {{ smsSending ? 'Изпращане...' : 'Изпрати тестов SMS' }}
+      </button>
+    </div>
   </div>
 </div>

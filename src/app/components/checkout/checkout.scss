@@ -8,37 +8,97 @@
     margin-bottom: 20px;
   }
 
+  .address-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    label {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    select {
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 10px;
+      background: #fff;
+    }
+  }
+
+  .tabs-wrap {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .tab-button {
+    border: 1px solid #d0d7de;
+    background: #fff;
+    color: #2c3e50;
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .tab-button.active {
+    background: #2c3e50;
+    color: #fff;
+    border-color: #2c3e50;
+  }
+
   .checkout-content {
     background-color: #fff;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    .items-list {
-      .item {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 0;
-        border-bottom: 1px solid #ecf0f1;
+    .table-card {
+      border: 1px solid #e6ebf1;
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-        &:last-child {
-          border-bottom: none;
-        }
-      }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
 
-      .total {
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 2px solid #3498db;
-        text-align: right;
-        font-size: 18px;
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #eef2f6;
+        text-align: left;
       }
     }
 
     .no-items {
       text-align: center;
       color: #7f8c8d;
-      padding: 40px 0;
+      padding: 20px 0;
+    }
+
+    .checkout-actions {
+      margin-top: 16px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .sms-btn {
+      border: 1px solid #2c3e50;
+      background: #2c3e50;
+      color: #fff;
+      border-radius: 6px;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    .sms-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
     }
   }
 }
