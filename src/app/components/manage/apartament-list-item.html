@@ -9,6 +9,18 @@
       <p>Етаж: <b>{{ floor ?? 'няма данни' }}</b></p>
       <p>Брой живущи: <b>{{ member_amount ?? 'няма данни' }}</b></p>
       <p>
+        Домашни любимци:
+        <span [ngClass]="pets ? 'badge-yes' : 'badge-no'">
+          {{ pets ? 'Да' : 'Не' }}
+        </span>
+      </p>
+      <p>
+        Дава ли се под наем:
+        <span [ngClass]="rent ? 'badge-yes' : 'badge-no'">
+          {{ rent ? 'Да' : 'Не' }}
+        </span>
+      </p>
+      <p>
         Използва ли асансьор: 
         <span [ngClass]="elevator ? 'badge-yes' : 'badge-no'">
           {{ elevator ? 'Да' : 'Не' }}

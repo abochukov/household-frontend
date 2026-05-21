@@ -7,6 +7,7 @@ import { Manage } from './components/manage/manage';
 import { CreateAddress } from './components/create-address/create-address';
 import { CreateProperty } from './components/create-property/create-property';
 import { LandingComponent } from './components/landing/landing';
+import { ApartamentDetails } from './components/manage/apartament-details';
 
 export const routes: Routes = [
     { path: '', component: LandingComponent },
@@ -14,6 +15,7 @@ export const routes: Routes = [
     { path: 'home', component: Home },
     { path: 'checkout', component: Checkout },
     { path: 'manage', component: Manage },
+    { path: 'apartament/:id', component: ApartamentDetails },
     { path: 'create-address', component: CreateAddress },
     { path: 'create-property', component: CreateProperty },
     { path: '**', redirectTo: '/' }

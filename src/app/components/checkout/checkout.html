@@ -1,59 +1,61 @@
 <div class="checkout-container">
   <h2>Каса</h2>
 
-  <div class="address-box">
-    <label for="checkout-address">Изберете адрес</label>
-    <select
-      id="checkout-address"
-      [disabled]="loading"
-      [value]="addressControl.value ?? ''"
-      (change)="handleAddressSelection($any($event.target).value)"
-    >
-      <option value="">-- изберете --</option>
-      <option *ngFor="let address of addresses" [value]="address.address_id">
-        {{ address.city }}, {{ address.address }}, вход {{ address.entrance }}
-      </option>
-    </select>
-  </div>
+  <app-address-list
+    [addresses]="addresses"
+    [loading]="loading"
+    [control]="addressControl"
+    [required]="true"
+    label="Изберете адрес"
+    validationMessage="Моля, изберете адрес"
+    emptyMessage="Няма налични адреси. Моля, създайте адрес първо."
+    (addressSelected)="handleAddressSelection($event)"
+  ></app-address-list>
 
   <div class="tabs-wrap">
-    <button
-      type="button"
-      *ngFor="let tab of tabs"
-      class="tab-button"
-      [class.active]="activeTab === tab.value"
-      (click)="onTabChange(tab.value)"
-    >
-      {{ tab.label }}
-    </button>
-  </div>
+    @for(tab of tabs; track tab.value) {
+      <button
+        type="button"
+        class="tab-button"
+        [class.active]="activeTab === tab.value"
+        (click)="onTabChange(tab.value)"
+      >
+        {{ tab.label }}
+      </button>
+    }
+</div>
 
-  <div class="checkout-content">
-    <div class="table-card" *ngIf="tableRows.length > 0; else noRows">
-      <table class="data-table">
-        <thead>
+<div class="table-card">
+  <table class="data-table">
+    @if(tableRows.length > 0) {
+      <thead>
+        <tr>
+          <th>Aпартамент</th>
+          <th>Сума</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(row of tableRows; track row.name) {
           <tr>
-            <th>Апартамент</th>
-            <th>Брой живущи</th>
+            <td>{{ row.name }}</td>
+            <td>{{ row.value | number:'1.2-2' }}</td>
           </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of tableRows">
-            <td>{{ row.apartment }}</td>
-            <td>{{ row.residents }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        }
+      </tbody>
+    } @else {
+      <ng-container *ngTemplateOutlet="noRows"></ng-container>
+    }
+  </table>
 
-    <ng-template #noRows>
-      <p class="no-items">{{ getNoDataMessage() }}</p>
-    </ng-template>
+  <ng-template #noRows>
+    <div class="no-data">
+      {{ getNoDataMessage() }}
+    </div>
+  </ng-template>
+</div>
 
     <div class="checkout-actions">
       <button type="button" class="sms-btn" [disabled]="smsSending" (click)="sendTestSms()">
         {{ smsSending ? 'Изпращане...' : 'Изпрати тестов SMS' }}
       </button>
     </div>
-  </div>
-</div>

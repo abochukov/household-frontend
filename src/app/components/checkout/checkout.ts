@@ -5,33 +5,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { AddressService, Address } from '../../services/address.service';
 import { PropertyService, Property } from '../../services/property.service';
 import { UserService } from '../../services/user.service';
-import { SmsService } from '../../services/sms.service';
 import { ToastService } from '../../services/toast.service';
+import { AddressListComponent } from '../shared/address-list/address-list';
+import { AddressListItem } from '../../shared/models/address-list-item';
+import { SmsService } from '../../services/sms.service';
 
-type TabKey =
-  | 'january'
-  | 'february'
-  | 'march'
-  | 'april'
-  | 'may'
-  | 'june'
-  | 'july'
-  | 'august'
-  | 'september'
-  | 'october'
-  | 'november'
-  | 'december'
-  | 'total';
-
+type TabKey = 'january' | 'february' | 'march' | 'april' | 'may' | 'june' | 'july' | 'august' | 'september' | 'october' | 'november' | 'december' | 'total';
 interface TableRow {
-  apartment: string;
-  residents: number;
+  name: string;
+  value: number;
 }
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, AddressListComponent],
   templateUrl: './checkout.html',
   styleUrls: ['./checkout.scss']
 })
@@ -82,9 +70,31 @@ export class Checkout {
         this.loadAddresses();
         this.loadProperties();
       },
-      error: () => {
-        this.toastService.showError('Моля, влезте в системата');
+      error: (err) => {
+        if (err.status === 401) {
+          this.toastService.showError('Моля, влезте в системата');
+          return;
+        }
+
+        this.toastService.showError('Грешка при зареждане на потребителя');
+      }
+    });
+  }
+
+  loadProperties() {
+    if (!this.currentUserEmail) {
+      return;
+    }
+
+    this.propertyService.getPropertiesForUser(this.currentUserEmail).subscribe({
+      next: (properties) => {
+        this.userProperties = properties;
+        this.dataCache.clear();
+        this.updateRowsForSelection();
       },
+      error: () => {
+        this.toastService.showError('Грешка при зареждане на апартаментите');
+      }
     });
   }
 
@@ -102,31 +112,15 @@ export class Checkout {
       error: () => {
         this.toastService.showError('Грешка при зареждане на адресите');
         this.loading = false;
-      },
+      }
     });
   }
 
-  loadProperties() {
-    if (!this.currentUserEmail) {
-      return;
-    }
+  handleAddressSelection(address: AddressListItem) {
+    this.selectedAddress = this.addresses.find(
+      (item) => item.address_id === address.address_id
+    ) || null;
 
-    this.propertyService.getPropertiesForUser(this.currentUserEmail).subscribe({
-      next: (properties) => {
-        this.userProperties = properties;
-        this.refreshTableData();
-      },
-      error: () => {
-        this.toastService.showError('Грешка при зареждане на апартаментите');
-      },
-    });
-  }
-
-  handleAddressSelection(addressIdValue: string) {
-    const addressId = Number(addressIdValue);
-    this.addressControl.setValue(Number.isNaN(addressId) ? null : addressId);
-    this.selectedAddress =
-      this.addresses.find((address) => address.address_id === addressId) || null;
     this.updateRowsForSelection();
   }
 
@@ -154,15 +148,18 @@ export class Checkout {
   }
 
   private buildRows(addressId: number, tab: TabKey): TableRow[] {
-    const byAddress = this.userProperties.filter((property) => property.address_id === addressId);
-    const filtered =
-      tab === 'total'
-        ? byAddress
-        : byAddress.filter((property) => this.isInTabMonth(property.created_at, tab));
+    const byAddress = this.userProperties.filter(
+      (property) => property.address_id === addressId,
+    );
+
+    const filtered = tab === 'total'
+      ? byAddress
+      : byAddress.filter((property) => this.isInTabMonth(property.created_at, tab));
 
     return filtered.map((property) => ({
-      apartment: `ап. ${property.property_number}`,
-      residents: Number(property.member_amount ?? 0),
+      name: `ап. ${property.property_number}`,
+      // TODO: Replace with billed amount when payment endpoint is available.
+      value: Number(property.area ?? 0),
     }));
   }
 
