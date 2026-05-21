@@ -11,4 +11,45 @@
     emptyMessage="Няма налични адреси. Моля, създайте адрес първо."
     (addressSelected)="handleAddressSelection($event)"
   ></app-address-list>
+
+  <div class="tabs-wrap">
+    @for(tab of tabs; track tab.value) {
+      <button
+        type="button"
+        class="tab-button"
+        [class.active]="activeTab === tab.value"
+        (click)="onTabChange(tab.value)"
+      >
+        {{ tab.label }}
+      </button>
+    }
+</div>
+
+<div class="table-card">
+  <table class="data-table">
+    @if(tableRows.length > 0) {
+      <thead>
+        <tr>
+          <th>Aпартамент</th>
+          <th>Сума</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(row of tableRows; track row.name) {
+          <tr>
+            <td>{{ row.name }}</td>
+            <td>{{ row.value | number:'1.2-2' }}</td>
+          </tr>
+        }
+      </tbody>
+    } @else {
+      <ng-container *ngTemplateOutlet="noRows"></ng-container>
+    }
+  </table>
+
+  <ng-template #noRows>
+    <div class="no-data">
+      {{ getNoDataMessage() }}
+    </div>
+  </ng-template>
 </div>
