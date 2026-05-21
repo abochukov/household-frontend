@@ -53,3 +53,9 @@
     </div>
   </ng-template>
 </div>
+
+    <div class="checkout-actions">
+      <button type="button" class="sms-btn" [disabled]="smsSending" (click)="sendTestSms()">
+        {{ smsSending ? 'Изпращане...' : 'Изпрати тестов SMS' }}
+      </button>
+    </div>

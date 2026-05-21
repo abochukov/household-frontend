@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { API_BASE_URL } from '../config/api.config';
 
 export interface User {
   email: string;
@@ -11,7 +11,8 @@ export interface User {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = `${environment.apiBaseUrl}/me`;
+  private baseUrl = API_BASE_URL;
+  private apiUrl = `${this.baseUrl}/me`;
 
   constructor(private http: HttpClient) {}
 

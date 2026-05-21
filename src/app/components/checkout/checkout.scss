@@ -41,6 +41,73 @@
     border-color: #2c3e50;
   }
 
+  .checkout-content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .table-card {
+      border: 1px solid #e6ebf1;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #eef2f6;
+        text-align: left;
+      }
+    }
+
+    .no-items {
+      text-align: center;
+      color: #7f8c8d;
+      padding: 20px 0;
+    }
+
+    .checkout-actions {
+      margin-top: 16px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .sms-btn {
+      border: 1px solid #2c3e50;
+      background: #2c3e50;
+      color: #fff;
+      border-radius: 6px;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    .sms-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+  }
+
+  .tab-button {
+    border: 1px solid #d0d7de;
+    background: #fff;
+    color: #2c3e50;
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .tab-button.active {
+    background: #2c3e50;
+    color: #fff;
+    border-color: #2c3e50;
+  }
+
   .table-card {
     margin-top: 16px;
     background: #fff;

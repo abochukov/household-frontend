@@ -8,6 +8,7 @@ import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { AddressListComponent } from '../shared/address-list/address-list';
 import { AddressListItem } from '../../shared/models/address-list-item';
+import { SmsService } from '../../services/sms.service';
 
 type TabKey = 'january' | 'february' | 'march' | 'april' | 'may' | 'june' | 'july' | 'august' | 'september' | 'october' | 'november' | 'december' | 'total';
 interface TableRow {
@@ -19,17 +20,17 @@ interface TableRow {
   selector: 'app-checkout',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule, AddressListComponent],
-  providers: [AddressService, PropertyService],
   templateUrl: './checkout.html',
   styleUrls: ['./checkout.scss']
 })
-
 export class Checkout {
   addressControl: FormControl<number | null>;
   addresses: Address[] = [];
   selectedAddress: Address | null = null;
   loading = false;
   currentUserEmail = '';
+  userProperties: Property[] = [];
+
   tabs: { label: string; value: TabKey }[] = [
     { label: 'Януари', value: 'january' },
     { label: 'Февруари', value: 'february' },
@@ -49,14 +50,15 @@ export class Checkout {
   activeTab: TabKey = 'january';
   tableRows: TableRow[] = [];
   dataCache = new Map<string, TableRow[]>();
-  userProperties: Property[] = [];
+  smsSending = false;
 
   constructor(
     private fb: FormBuilder,
     private addressService: AddressService,
     private propertyService: PropertyService,
     private userService: UserService,
-    private toastService: ToastService
+    private smsService: SmsService,
+    private toastService: ToastService,
   ) {
     this.addressControl = this.fb.control<number | null>(null, Validators.required);
   }
@@ -124,7 +126,6 @@ export class Checkout {
 
   onTabChange(tab: TabKey) {
     this.activeTab = tab;
-
     this.updateRowsForSelection();
   }
 
@@ -205,5 +206,21 @@ export class Checkout {
     }
 
     return 'Няма апартаменти за този период.';
+  }
+
+  sendTestSms() {
+    this.smsSending = true;
+
+    this.smsService.sendTestSms('Платихте такса за вход - бл.628, вх.Д в размер на 12.12 евро!').subscribe({
+      next: () => {
+        this.toastService.showSuccess('SMS беше изпратен успешно');
+        this.smsSending = false;
+      },
+      error: (error) => {
+        const backendMessage = error?.error?.message;
+        this.toastService.showError(backendMessage || 'Неуспешно изпращане на SMS');
+        this.smsSending = false;
+      },
+    });
   }
 }
