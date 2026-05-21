@@ -16,6 +16,8 @@
       <p>Площ: <b>{{ apartament.area }}</b></p>
       <p>Брой живущи: <b>{{ apartament.member_amount }}</b></p>
       <p>% идеални части: <b>{{ apartament.ideal_share ?? '-' }}</b></p>
+      <p>E-mail: <b>{{ apartament.email ?? '-' }}</b></p>
+      <p>Телефон: <b>{{ apartament.phone_number ?? '-' }}</b></p>
       <p>
         Домашни любимци:
         <span [ngClass]="apartament.pets ? 'badge-yes' : 'badge-no'">
@@ -66,6 +68,16 @@
         <label>
           % идеални части
           <input type="number" min="0" max="100" step="0.01" formControlName="ideal_share" />
+        </label>
+
+        <label>
+          E-mail
+          <input type="email" formControlName="email" />
+        </label>
+
+        <label>
+          Телефон
+          <input type="text" formControlName="phone_number" />
         </label>
 
         <label>

@@ -91,12 +91,19 @@ export class Manage implements OnInit {
   }
 
   get filteredApartaments(): Property[] {
-    if (this.selectedAddressId == null) {
-      return this.apartaments;
-    }
+    const filtered = this.selectedAddressId == null
+      ? this.apartaments
+      : this.apartaments.filter(
+        (apartament) => apartament.address_id === this.selectedAddressId,
+      );
 
-    return this.apartaments.filter(
-      (apartament) => apartament.address_id === this.selectedAddressId,
-    );
+    return [...filtered].sort((a, b) => this.compareApartmentNumber(a.property_number, b.property_number));
+  }
+
+  private compareApartmentNumber(a: string, b: string): number {
+    return String(a ?? '').localeCompare(String(b ?? ''), undefined, {
+      numeric: true,
+      sensitivity: 'base'
+    });
   }
 }

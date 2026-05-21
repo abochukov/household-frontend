@@ -33,6 +33,8 @@ export class ApartamentDetails implements OnInit {
       area: [0, [Validators.required, Validators.min(1)]],
       member_amount: [1, [Validators.required, Validators.min(1)]],
       ideal_share: [null, [Validators.min(0), Validators.max(100)]],
+      email: ['', [Validators.email]],
+      phone_number: [''],
       pets: [false],
       rent: [false],
       elevator: [false]
@@ -102,6 +104,8 @@ export class ApartamentDetails implements OnInit {
         this.detailsForm.value.ideal_share === null || this.detailsForm.value.ideal_share === ''
           ? null
           : Number(this.detailsForm.value.ideal_share),
+      email: this.detailsForm.value.email || null,
+      phone_number: this.detailsForm.value.phone_number || null,
       pets: Boolean(this.detailsForm.value.pets),
       rent: Boolean(this.detailsForm.value.rent),
       elevator: Boolean(this.detailsForm.value.elevator)
@@ -133,6 +137,8 @@ export class ApartamentDetails implements OnInit {
       area: property.area,
       member_amount: property.member_amount,
       ideal_share: property.ideal_share ?? null,
+      email: property.email ?? '',
+      phone_number: property.phone_number ?? '',
       pets: property.pets ?? false,
       rent: property.rent ?? false,
       elevator: property.elevator ?? false

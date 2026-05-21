@@ -82,6 +82,25 @@
 
     <div class="form-row">
       <div class="form-group">
+        <label>E-mail</label>
+        <input
+          type="email"
+          formControlName="email"
+          [class.invalid]="propertyForm.get('email')?.invalid && propertyForm.get('email')?.touched"
+        >
+        <div class="error-message" *ngIf="propertyForm.get('email')?.invalid && propertyForm.get('email')?.touched">
+          Моля, въведете валиден e-mail
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Телефон</label>
+        <input type="text" formControlName="phone_number">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
         <label>Домашни любимци</label>
         <select formControlName="pets">
           <option [ngValue]="false">Не</option>

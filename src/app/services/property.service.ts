@@ -11,6 +11,8 @@ export interface Property {
   area: number;
   member_amount: number;
   ideal_share?: number;
+  email?: string;
+  phone_number?: string;
   pets?: boolean;
   rent?: boolean;
   elevator: boolean;
@@ -45,6 +47,8 @@ export class PropertyService {
     area: number;
     member_amount: number;
     ideal_share?: number;
+    email?: string;
+    phone_number?: string;
     pets?: boolean;
     rent?: boolean;
     elevator: boolean;
