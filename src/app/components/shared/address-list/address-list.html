@@ -1,0 +1,29 @@
+<div class="address-list">
+  <label>
+    {{ label }}
+    <span *ngIf="required" class="required-field">*</span>
+  </label>
+
+  <div class="radio-group">
+    <div *ngFor="let address of addresses" class="radio-item">
+      <p-radiobutton
+        [formControl]="control"
+        [inputId]="'address-' + address.address_id"
+        name="address"
+        [value]="address.address_id"
+        (onClick)="onAddressClick(address)"
+      ></p-radiobutton>
+      <label [for]="'address-' + address.address_id">
+        {{ address.city }}, {{ address.address }}, Вход {{ address.entrance }}
+      </label>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="shouldShowValidationError">
+    {{ validationMessage }}
+  </div>
+
+  <div *ngIf="addresses.length === 0 && !loading" class="no-addresses">
+    <p>{{ emptyMessage }}</p>
+  </div>
+</div>

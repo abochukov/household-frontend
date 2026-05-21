@@ -1,24 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PropertyService, Property } from '../../services/property.service';
 import { AddressService, Address } from '../../services/address.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { HttpClientModule } from '@angular/common/http';
-import { RadioButtonModule } from 'primeng/radiobutton';
+import { AddressListComponent } from '../shared/address-list/address-list';
+import { AddressListItem } from '../../shared/models/address-list-item';
 
 @Component({
   selector: 'app-create-property',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RadioButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, AddressListComponent],
   providers: [PropertyService, AddressService],
   templateUrl: './create-property.html',
   styleUrls: ['./create-property.scss']
 })
 export class CreateProperty implements OnInit {
   propertyForm!: FormGroup;
+  addressControl!: FormControl<number | null>;
   addresses: Address[] = [];
   selectedAddress: Address | null = null;
   loading: boolean = false;
@@ -44,6 +46,8 @@ export class CreateProperty implements OnInit {
       rent: [false],
       elevator: [false]
     });
+
+    this.addressControl = this.propertyForm.get('address_id') as FormControl<number | null>;
 
     // Get current user from session
     this.userService.getCurrentUser().subscribe({
@@ -80,8 +84,11 @@ export class CreateProperty implements OnInit {
     }
   }
 
-  handleAddressSelection(address: Address) {
-    this.selectedAddress = address;
+  handleAddressSelection(address: AddressListItem) {
+    this.selectedAddress = this.addresses.find(
+      (item) => item.address_id === address.address_id
+    ) || null;
+
     this.propertyForm.patchValue({ address_id: address.address_id });
   }
 
