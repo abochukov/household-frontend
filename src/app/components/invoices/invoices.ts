@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { HttpClientModule } from '@angular/common/http';
 import { AddressService, Address } from '../../services/address.service';
 import { Property, PropertyService } from '../../services/property.service';
+import { MonthColumn, TotalSumService, YearlyTotalRow } from '../../services/total-sum.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { AddressListComponent } from '../shared/address-list/address-list';
@@ -28,6 +29,7 @@ type TabKey =
 type MonthTabKey = Exclude<TabKey, 'total'>;
 
 interface InvoiceRow {
+  propertyId: number;
   apartmentNumber: string;
   residents: number;
   usesElevator: boolean;
@@ -51,9 +53,13 @@ export class Invoices {
   addresses: Address[] = [];
   selectedAddress: Address | null = null;
   loading = false;
+  saving = false;
+  loadingTotals = false;
   currentUserEmail = '';
+  currentYear = new Date().getFullYear();
   allProperties: Property[] = [];
   rows: InvoiceRow[] = [];
+  yearlyTotals: YearlyTotalRow[] = [];
 
   tabs: MonthTabItem[] = [
     { label: 'Януари', value: 'january' },
@@ -79,6 +85,7 @@ export class Invoices {
     private fb: FormBuilder,
     private addressService: AddressService,
     private propertyService: PropertyService,
+    private totalSumService: TotalSumService,
     private userService: UserService,
     private toastService: ToastService,
   ) {
@@ -121,6 +128,10 @@ export class Invoices {
     ) || null;
 
     this.rebuildRows();
+
+    if (this.activeTab === 'total') {
+      this.loadYearlyTotals();
+    }
   }
 
   onTabChange(tabValue: string) {
@@ -130,6 +141,10 @@ export class Invoices {
 
     this.activeTab = tabValue as TabKey;
     this.rebuildRows();
+
+    if (this.activeTab === 'total') {
+      this.loadYearlyTotals();
+    }
   }
 
   private loadProperties() {
@@ -172,10 +187,16 @@ export class Invoices {
   private rebuildRows() {
     if (!this.selectedAddress || this.selectedAddress.address_id == null) {
       this.rows = [];
+      this.yearlyTotals = [];
       return;
     }
 
-    const properties = this.getPropertiesForActiveTab();
+    if (this.activeTab === 'total') {
+      this.rows = [];
+      return;
+    }
+
+    const properties = this.getPropertiesForSelectedAddress();
 
     const totalResidents = properties.reduce((sum, p) => sum + Number(p.member_amount || 0), 0);
     const totalIdealShare = properties.reduce((sum, p) => sum + Number(p.ideal_share || 0), 0);
@@ -216,6 +237,7 @@ export class Invoices {
         majorRepair;
 
       return {
+        propertyId: Number(property.property_id),
         apartmentNumber: property.property_number,
         residents,
         usesElevator: isElevatorUser,
@@ -229,21 +251,61 @@ export class Invoices {
     });
   }
 
-  private getPropertiesForActiveTab(): Property[] {
+  private getPropertiesForSelectedAddress(): Property[] {
     if (!this.selectedAddress || this.selectedAddress.address_id == null) {
       return [];
     }
 
-    const byAddress = this.allProperties.filter(
+    return this.allProperties.filter(
       (property) => property.address_id === this.selectedAddress?.address_id,
     );
+  }
 
+  saveCurrentMonth() {
     if (this.activeTab === 'total') {
-      return byAddress;
+      return;
     }
 
-    const monthTab: MonthTabKey = this.activeTab;
-    return byAddress.filter((p) => this.isInMonth(p.created_at, monthTab));
+    if (!this.currentUserEmail) {
+      this.toastService.showError('Липсва потребителска сесия');
+      return;
+    }
+
+    if (!this.selectedAddress || this.selectedAddress.address_id == null) {
+      this.toastService.showError('Изберете адрес');
+      return;
+    }
+
+    if (this.rows.length === 0) {
+      this.toastService.showError('Няма апартаменти за запис');
+      return;
+    }
+
+    const month = this.activeTab as MonthTabKey;
+    const payloadRows = this.rows.map((row) => ({
+      property_id: row.propertyId,
+      property_number: row.apartmentNumber,
+      amount: Number(row.total.toFixed(2)),
+    }));
+
+    this.saving = true;
+    this.totalSumService.saveMonth({
+      username: this.currentUserEmail,
+      address_id: this.selectedAddress.address_id,
+      year: this.currentYear,
+      month: month as MonthColumn,
+      rows: payloadRows,
+    }).subscribe({
+      next: () => {
+        this.saving = false;
+        this.toastService.showSuccess('Сметките са записани успешно');
+        this.loadYearlyTotals();
+      },
+      error: () => {
+        this.saving = false;
+        this.toastService.showError('Грешка при запис на сметките');
+      },
+    });
   }
 
   getNoDataMessage(): string {
@@ -251,39 +313,37 @@ export class Invoices {
       return 'Изберете адрес, за да заредите апартаментите.';
     }
 
+    if (this.activeTab === 'total') {
+      return 'Няма записани суми за текущата година.';
+    }
+
     return 'Няма апартаменти за избрания период.';
   }
 
-  private isInMonth(createdAt: string | undefined, tab: MonthTabKey): boolean {
-    if (!createdAt) {
-      return false;
+  private loadYearlyTotals() {
+    if (!this.currentUserEmail || !this.selectedAddress || this.selectedAddress.address_id == null) {
+      this.yearlyTotals = [];
+      return;
     }
 
-    const date = new Date(createdAt);
-    if (Number.isNaN(date.getTime())) {
-      return false;
-    }
-
-    return date.getMonth() === this.monthIndex(tab);
+    this.loadingTotals = true;
+    this.totalSumService.getYearly(this.currentUserEmail, this.selectedAddress.address_id, this.currentYear).subscribe({
+      next: (rows) => {
+        this.yearlyTotals = [...rows].sort((a, b) =>
+          this.compareApartmentNumber(a.property_number, b.property_number),
+        );
+        this.loadingTotals = false;
+      },
+      error: () => {
+        this.loadingTotals = false;
+        this.yearlyTotals = [];
+        this.toastService.showError('Грешка при зареждане на общите суми');
+      },
+    });
   }
 
-  private monthIndex(tab: MonthTabKey): number {
-    const monthMap: Record<MonthTabKey, number> = {
-      january: 0,
-      february: 1,
-      march: 2,
-      april: 3,
-      may: 4,
-      june: 5,
-      july: 6,
-      august: 7,
-      september: 8,
-      october: 9,
-      november: 10,
-      december: 11,
-    };
-
-    return monthMap[tab];
+  get isTotalTab(): boolean {
+    return this.activeTab === 'total';
   }
 
   private byResidents(total: number, residents: number, totalResidents: number): number {
