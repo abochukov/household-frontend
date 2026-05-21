@@ -1,0 +1,78 @@
+<div class="invoices-container">
+	<h2>Фактуриране</h2>
+
+	<app-month-tabs
+		[tabs]="tabs"
+		[activeTab]="activeTab"
+		(tabChange)="onTabChange($event)"
+	></app-month-tabs>
+
+	<form [formGroup]="chargesForm" class="charges-form">
+		<label>
+			Чистачка и препарати
+			<input type="number" min="0" formControlName="cleaner" />
+		</label>
+
+		<label>
+			Асансьор абонамент
+			<input type="number" min="0" formControlName="elevatorSubscription" />
+		</label>
+
+		<label>
+			Асансьор ток
+			<input type="number" min="0" formControlName="elevatorElectricity" />
+		</label>
+
+		<label>
+			Ток стълбище
+			<input type="number" min="0" formControlName="stairsElectricity" />
+		</label>
+
+		<label>
+			Основен ремонт
+			<input type="number" min="0" formControlName="majorRepair" />
+		</label>
+	</form>
+
+	<div class="table-card">
+		@if(rows.length > 0) {
+			<table class="invoices-table">
+				<thead>
+					<tr>
+						<th rowspan="2">Номер на апартамента</th>
+						<th rowspan="2">Брой лица</th>
+						<th rowspan="2">Ползва асансьор</th>
+						<th rowspan="2">Чистачка и препарати</th>
+						<th colspan="2">Асансьор</th>
+						<th rowspan="2">Ток стълбище</th>
+						<th rowspan="2">Основен ремонт</th>
+						<th rowspan="2">Обща сума</th>
+					</tr>
+					<tr>
+						<th>Абонамент</th>
+						<th>Ток</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for(row of rows; track row.apartmentNumber) {
+						<tr>
+							<td>{{ row.apartmentNumber }}</td>
+							<td>{{ row.residents }}</td>
+							<td>{{ row.usesElevator ? 'Да' : 'Не' }}</td>
+							<td>{{ row.cleaner | number: '1.2-2' }}</td>
+							<td>{{ row.elevatorSubscription | number: '1.2-2' }}</td>
+							<td>{{ row.elevatorElectricity | number: '1.2-2' }}</td>
+							<td>{{ row.stairsElectricity | number: '1.2-2' }}</td>
+							<td>{{ row.majorRepair | number: '1.2-2' }}</td>
+							<td class="total">{{ row.total | number: '1.2-2' }}</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		} @else {
+			<p class="no-data">
+				{{ loading ? 'Зареждане...' : 'Няма апартаменти за избрания период.' }}
+			</p>
+		}
+	</div>
+</div>

@@ -1,0 +1,67 @@
+.invoices-container {
+	padding: 20px;
+	margin: 0 auto;
+}
+
+.invoices-container h2 {
+	color: #2c3e50;
+	margin-bottom: 16px;
+}
+
+.charges-form {
+	display: grid;
+	gap: 12px;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	margin-bottom: 16px;
+}
+
+.charges-form label {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	font-size: 14px;
+	color: #34495e;
+}
+
+.charges-form input {
+	border: 1px solid #cfd8e3;
+	border-radius: 6px;
+	padding: 8px 10px;
+}
+
+.table-card {
+	background: #fff;
+	border: 1px solid #e6ebf1;
+	border-radius: 10px;
+	padding: 12px;
+	overflow-x: auto;
+}
+
+.invoices-table {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 960px;
+}
+
+.invoices-table th,
+.invoices-table td {
+	border: 1px solid #eef2f6;
+	padding: 10px;
+	text-align: center;
+}
+
+.invoices-table thead th {
+	background: #f8fafc;
+	color: #2c3e50;
+}
+
+.invoices-table td.total {
+	font-weight: 700;
+}
+
+.no-data {
+	margin: 0;
+	color: #7f8c8d;
+	text-align: center;
+	padding: 20px;
+}

@@ -12,50 +12,44 @@
     (addressSelected)="handleAddressSelection($event)"
   ></app-address-list>
 
-  <div class="tabs-wrap">
-    @for(tab of tabs; track tab.value) {
-      <button
-        type="button"
-        class="tab-button"
-        [class.active]="activeTab === tab.value"
-        (click)="onTabChange(tab.value)"
-      >
-        {{ tab.label }}
-      </button>
-    }
-</div>
+  <app-month-tabs
+    [tabs]="tabs"
+    [activeTab]="activeTab"
+    (tabChange)="onTabChange($event)"
+  ></app-month-tabs>
 
-<div class="table-card">
-  <table class="data-table">
-    @if(tableRows.length > 0) {
-      <thead>
-        <tr>
-          <th>Aпартамент</th>
-          <th>Сума</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for(row of tableRows; track row.name) {
+  <div class="table-card">
+    <table class="data-table">
+      @if(tableRows.length > 0) {
+        <thead>
           <tr>
-            <td>{{ row.name }}</td>
-            <td>{{ row.value | number:'1.2-2' }}</td>
+            <th>Aпартамент</th>
+            <th>Сума</th>
           </tr>
-        }
-      </tbody>
-    } @else {
-      <ng-container *ngTemplateOutlet="noRows"></ng-container>
-    }
-  </table>
+        </thead>
+        <tbody>
+          @for(row of tableRows; track row.name) {
+            <tr>
+              <td>{{ row.name }}</td>
+              <td>{{ row.value | number:'1.2-2' }}</td>
+            </tr>
+          }
+        </tbody>
+      } @else {
+        <ng-container *ngTemplateOutlet="noRows"></ng-container>
+      }
+    </table>
 
-  <ng-template #noRows>
-    <div class="no-data">
-      {{ getNoDataMessage() }}
-    </div>
-  </ng-template>
+    <ng-template #noRows>
+      <div class="no-data">
+        {{ getNoDataMessage() }}
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="checkout-actions">
+    <button type="button" class="sms-btn" [disabled]="smsSending" (click)="sendTestSms()">
+      {{ smsSending ? 'Изпращане...' : 'Изпрати тестов SMS' }}
+    </button>
+  </div>
 </div>
-
-    <div class="checkout-actions">
-      <button type="button" class="sms-btn" [disabled]="smsSending" (click)="sendTestSms()">
-        {{ smsSending ? 'Изпращане...' : 'Изпрати тестов SMS' }}
-      </button>
-    </div>

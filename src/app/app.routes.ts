@@ -8,6 +8,7 @@ import { CreateAddress } from './components/create-address/create-address';
 import { CreateProperty } from './components/create-property/create-property';
 import { LandingComponent } from './components/landing/landing';
 import { ApartamentDetails } from './components/manage/apartament-details';
+import { Invoices } from './components/invoices/invoices';
 
 export const routes: Routes = [
     { path: '', component: LandingComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
     { path: 'apartament/:id', component: ApartamentDetails },
     { path: 'create-address', component: CreateAddress },
     { path: 'create-property', component: CreateProperty },
+    { path: 'invoices', component: Invoices },
     { path: '**', redirectTo: '/' }
 ];
