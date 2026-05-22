@@ -1,0 +1,151 @@
+<div class="invoices-container">
+	<h2>Фактуриране</h2>
+
+	<app-address-list
+		[addresses]="addresses"
+		[loading]="loading"
+		[control]="addressControl"
+		[required]="true"
+		label="Изберете адрес"
+		validationMessage="Моля, изберете адрес"
+		emptyMessage="Няма налични адреси. Моля, създайте адрес първо."
+		(addressSelected)="handleAddressSelection($event)"
+	></app-address-list>
+
+	<app-month-tabs
+		[tabs]="tabs"
+		[activeTab]="activeTab"
+		(tabChange)="onTabChange($event)"
+	></app-month-tabs>
+
+	<form [formGroup]="chargesForm" class="charges-form">
+		<label>
+			Чистачка и препарати
+			<input type="number" min="0" formControlName="cleaner" />
+		</label>
+
+		<label>
+			Асансьор абонамент
+			<input type="number" min="0" formControlName="elevatorSubscription" />
+		</label>
+
+		<label>
+			Асансьор ток
+			<input type="number" min="0" formControlName="elevatorElectricity" />
+		</label>
+
+		<label>
+			Ток стълбище
+			<input type="number" min="0" formControlName="stairsElectricity" />
+		</label>
+
+		<label>
+			Основен ремонт
+			<input type="number" min="0" formControlName="majorRepair" />
+		</label>
+	</form>
+
+	<div class="actions" *ngIf="!isTotalTab">
+		<button type="button" class="save-btn" (click)="saveCurrentMonth()" [disabled]="saving || rows.length === 0">
+			{{ saving ? 'Записване...' : 'Запази сметките' }}
+		</button>
+	</div>
+
+	<div class="table-card">
+		@if(!isTotalTab && rows.length > 0) {
+			<table class="invoices-table">
+				<thead>
+					<tr>
+						<th rowspan="2">Номер на апартамента</th>
+						<th rowspan="2">Брой лица</th>
+						<th rowspan="2">Ползва асансьор</th>
+						<th rowspan="2">Чистачка и препарати</th>
+						<th colspan="2">Асансьор</th>
+						<th rowspan="2">Ток стълбище</th>
+						<th rowspan="2">Основен ремонт</th>
+						<th rowspan="2">Обща сума</th>
+						<th rowspan="2">Плати</th>
+					</tr>
+					<tr>
+						<th>Абонамент</th>
+						<th>Ток</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for(row of rows; track row.apartmentNumber) {
+						<tr>
+							<td>{{ row.apartmentNumber }}</td>
+							<td>{{ row.residents }}</td>
+							<td>{{ row.usesElevator ? 'Да' : 'Не' }}</td>
+							<td>{{ row.cleaner | number: '1.2-2' }}</td>
+							<td>{{ row.elevatorSubscription | number: '1.2-2' }}</td>
+							<td>{{ row.elevatorElectricity | number: '1.2-2' }}</td>
+							<td>{{ row.stairsElectricity | number: '1.2-2' }}</td>
+							<td>{{ row.majorRepair | number: '1.2-2' }}</td>
+							<td class="total">{{ row.total | number: '1.2-2' }}</td>
+							<td>
+								<button
+									type="button"
+									class="pay-btn"
+									(click)="payForRow(row)"
+									[disabled]="isPayDisabled(row)"
+								>
+									{{ getPayLabel(row) }}
+								</button>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		} @else if (isTotalTab && yearlyTotals.length > 0) {
+			<table class="invoices-table totals-table">
+				<thead>
+					<tr>
+						<th>Апартамент</th>
+						<th>Януари</th>
+						<th>Февруари</th>
+						<th>Март</th>
+						<th>Април</th>
+						<th>Май</th>
+						<th>Юни</th>
+						<th>Юли</th>
+						<th>Август</th>
+						<th>Септември</th>
+						<th>Октомври</th>
+						<th>Ноември</th>
+						<th>Декември</th>
+						<th>Брой месеци</th>
+						<th>Платени месеци</th>
+						<th>Общо</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for(row of yearlyTotals; track row.property_id) {
+						<tr>
+							<td>{{ row.property_number }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'january')">{{ row.january == null ? '-' : (row.january | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'february')">{{ row.february == null ? '-' : (row.february | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'march')">{{ row.march == null ? '-' : (row.march | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'april')">{{ row.april == null ? '-' : (row.april | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'may')">{{ row.may == null ? '-' : (row.may | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'june')">{{ row.june == null ? '-' : (row.june | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'july')">{{ row.july == null ? '-' : (row.july | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'august')">{{ row.august == null ? '-' : (row.august | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'september')">{{ row.september == null ? '-' : (row.september | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'october')">{{ row.october == null ? '-' : (row.october | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'november')">{{ row.november == null ? '-' : (row.november | number: '1.2-2') }}</td>
+							<td [ngClass]="getTotalMonthCellClass(row, 'december')">{{ row.december == null ? '-' : (row.december | number: '1.2-2') }}</td>
+							<td>{{ row.month_amount ?? 0 }}</td>
+							<td>{{ row.paid_months }}</td>
+							<td class="total">{{ row.total_sum == null ? '-' : (row.total_sum | number: '1.2-2') }}</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		} @else {
+			<p class="no-data">
+				{{ loading || loadingTotals ? 'Зареждане...' : getNoDataMessage() }}
+			</p>
+		}
+	</div>
+</div>

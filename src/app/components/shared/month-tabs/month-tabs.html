@@ -1,0 +1,12 @@
+<div class="tabs-wrap">
+  @for(tab of tabs; track tab.value) {
+    <button
+      type="button"
+      class="tab-button"
+      [class.active]="activeTab === tab.value"
+      (click)="selectTab(tab.value)"
+    >
+      {{ tab.label }}
+    </button>
+  }
+</div>

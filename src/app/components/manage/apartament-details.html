@@ -6,33 +6,111 @@
   </div>
 
   <div *ngIf="!loading && apartament" class="details-card">
-    <p>Град: <b>{{ apartament.city ?? 'няма данни' }}</b></p>
-    <p>Квартал: <b>{{ apartament.neighbourhood ?? 'няма данни' }}</b></p>
-    <p>Адрес: <b>{{ apartament.address ?? 'няма данни' }}</b></p>
-    <p>Вход: <b>{{ apartament.entrance ?? 'няма данни' }}</b></p>
-    <p>Номер на апартамент: <b>{{ apartament.property_number }}</b></p>
-    <p>Етаж: <b>{{ apartament.floor }}</b></p>
-    <p>Площ: <b>{{ apartament.area }}</b></p>
-    <p>Брой живущи: <b>{{ apartament.member_amount }}</b></p>
-    <p>
-      Домашни любимци:
-      <span [ngClass]="apartament.pets ? 'badge-yes' : 'badge-no'">
-        {{ apartament.pets ? 'Да' : 'Не' }}
-      </span>
-    </p>
-    <p>
-      Дава ли се под наем:
-      <span [ngClass]="apartament.rent ? 'badge-yes' : 'badge-no'">
-        {{ apartament.rent ? 'Да' : 'Не' }}
-      </span>
-    </p>
-    <p>
-      Използва ли асансьор:
-      <span [ngClass]="apartament.elevator ? 'badge-yes' : 'badge-no'">
-        {{ apartament.elevator ? 'Да' : 'Не' }}
-      </span>
-    </p>
+    <ng-container *ngIf="!editMode; else editTemplate">
+      <p>Град: <b>{{ apartament.city ?? 'няма данни' }}</b></p>
+      <p>Квартал: <b>{{ apartament.neighbourhood ?? 'няма данни' }}</b></p>
+      <p>Адрес: <b>{{ apartament.address ?? 'няма данни' }}</b></p>
+      <p>Вход: <b>{{ apartament.entrance ?? 'няма данни' }}</b></p>
+      <p>Номер на апартамент: <b>{{ apartament.property_number }}</b></p>
+      <p>Етаж: <b>{{ apartament.floor }}</b></p>
+      <p>Площ: <b>{{ apartament.area }}</b></p>
+      <p>Брой живущи: <b>{{ apartament.member_amount }}</b></p>
+      <p>% идеални части: <b>{{ apartament.ideal_share ?? '-' }}</b></p>
+      <p>E-mail: <b>{{ apartament.email ?? '-' }}</b></p>
+      <p>Телефон: <b>{{ apartament.phone_number ?? '-' }}</b></p>
+      <p>
+        Домашни любимци:
+        <span [ngClass]="apartament.pets ? 'badge-yes' : 'badge-no'">
+          {{ apartament.pets ? 'Да' : 'Не' }}
+        </span>
+      </p>
+      <p>
+        Дава ли се под наем:
+        <span [ngClass]="apartament.rent ? 'badge-yes' : 'badge-no'">
+          {{ apartament.rent ? 'Да' : 'Не' }}
+        </span>
+      </p>
+      <p>
+        Използва ли асансьор:
+        <span [ngClass]="apartament.elevator ? 'badge-yes' : 'badge-no'">
+          {{ apartament.elevator ? 'Да' : 'Не' }}
+        </span>
+      </p>
+    </ng-container>
 
-    <button class="custom-btn" [routerLink]="['/manage']">Назад</button>
+    <ng-template #editTemplate>
+      <form [formGroup]="detailsForm" class="details-form" (ngSubmit)="saveEdit()">
+        <p>Град: <b>{{ apartament.city ?? 'няма данни' }}</b></p>
+        <p>Квартал: <b>{{ apartament.neighbourhood ?? 'няма данни' }}</b></p>
+        <p>Адрес: <b>{{ apartament.address ?? 'няма данни' }}</b></p>
+        <p>Вход: <b>{{ apartament.entrance ?? 'няма данни' }}</b></p>
+
+        <label>
+          Номер на апартамент
+          <input type="text" formControlName="property_number" />
+        </label>
+
+        <label>
+          Етаж
+          <input type="number" formControlName="floor" />
+        </label>
+
+        <label>
+          Площ
+          <input type="number" formControlName="area" />
+        </label>
+
+        <label>
+          Брой живущи
+          <input type="number" formControlName="member_amount" />
+        </label>
+
+        <label>
+          % идеални части
+          <input type="number" min="0" max="100" step="0.01" formControlName="ideal_share" />
+        </label>
+
+        <label>
+          E-mail
+          <input type="email" formControlName="email" />
+        </label>
+
+        <label>
+          Телефон
+          <input type="text" formControlName="phone_number" />
+        </label>
+
+        <label>
+          Домашни любимци
+          <select formControlName="pets">
+            <option [ngValue]="false">Не</option>
+            <option [ngValue]="true">Да</option>
+          </select>
+        </label>
+
+        <label>
+          Дава ли се под наем
+          <select formControlName="rent">
+            <option [ngValue]="false">Не</option>
+            <option [ngValue]="true">Да</option>
+          </select>
+        </label>
+
+        <label>
+          Използва ли асансьор
+          <select formControlName="elevator">
+            <option [ngValue]="false">Не</option>
+            <option [ngValue]="true">Да</option>
+          </select>
+        </label>
+      </form>
+    </ng-template>
+
+    <div class="actions">
+      <button class="custom-btn" [routerLink]="['/manage']">Назад</button>
+      <button *ngIf="!editMode" class="custom-btn" type="button" (click)="startEdit()">Редактиране</button>
+      <button *ngIf="editMode" class="custom-btn-success" type="button" (click)="saveEdit()" [disabled]="saving">Запази</button>
+      <button *ngIf="editMode" class="custom-btn" type="button" (click)="cancelEdit()" [disabled]="saving">Отказ</button>
+    </div>
   </div>
 </div>

@@ -42,6 +42,9 @@ export class CreateProperty implements OnInit {
       floor: ['', Validators.required],
       area: [null, [Validators.required, Validators.min(1)]],
       member_amount: [1, [Validators.required, Validators.min(1)]],
+      ideal_share: [null, [Validators.min(0), Validators.max(100)]],
+      email: ['', [Validators.email]],
+      phone_number: [''],
       pets: [false],
       rent: [false],
       elevator: [false]
@@ -122,6 +125,9 @@ export class CreateProperty implements OnInit {
           this.propertyForm.reset({
             address_id: null,
             area: null,
+            ideal_share: null,
+            email: '',
+            phone_number: '',
             elevator: false,
             pets: false,
             rent: false,

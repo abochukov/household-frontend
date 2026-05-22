@@ -7,6 +7,7 @@ import { PropertyService, Property } from '../../services/property.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { AddressListComponent } from '../shared/address-list/address-list';
+import { MonthTabItem, MonthTabsComponent } from '../shared/month-tabs/month-tabs';
 import { AddressListItem } from '../../shared/models/address-list-item';
 import { SmsService } from '../../services/sms.service';
 
@@ -19,7 +20,7 @@ interface TableRow {
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, AddressListComponent],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, AddressListComponent, MonthTabsComponent],
   templateUrl: './checkout.html',
   styleUrls: ['./checkout.scss']
 })
@@ -31,7 +32,7 @@ export class Checkout {
   currentUserEmail = '';
   userProperties: Property[] = [];
 
-  tabs: { label: string; value: TabKey }[] = [
+  tabs: MonthTabItem[] = [
     { label: 'Януари', value: 'january' },
     { label: 'Февруари', value: 'february' },
     { label: 'Март', value: 'march' },
@@ -124,8 +125,12 @@ export class Checkout {
     this.updateRowsForSelection();
   }
 
-  onTabChange(tab: TabKey) {
-    this.activeTab = tab;
+  onTabChange(tabValue: string) {
+    if (!this.tabs.some((tab) => tab.value === tabValue)) {
+      return;
+    }
+
+    this.activeTab = tabValue as TabKey;
     this.updateRowsForSelection();
   }
 

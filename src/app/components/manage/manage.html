@@ -1,13 +1,30 @@
 <div class="manage-container">
   <h2>Управление на апартаменти</h2>
+
+  <div class="filters">
+    <label for="address-filter">Филтър по адрес</label>
+    <select
+      id="address-filter"
+      [value]="selectedAddressId ?? ''"
+      (change)="onAddressFilterChange($any($event.target).value)"
+    >
+      <option value="">Всички адреси</option>
+      <option *ngFor="let address of addresses" [value]="address.address_id">
+        {{ address.city }}, {{ address.address }}, вход {{ address.entrance }}
+      </option>
+    </select>
+
+    <button type="button" class="clear-btn" (click)="clearFilters()">Изчисти</button>
+  </div>
   
   <div class="apartament-list">
     <app-apartament-list-item 
-      *ngFor="let apartament of apartaments"
+      *ngFor="let apartament of filteredApartaments"
       [city]="apartament.city"
       [neighbourhood]="apartament.neighbourhood"
       [address]="apartament.address"
       [property_id]="apartament.property_id"
+      [ideal_share]="apartament.ideal_share"
       [property_number]="apartament.property_number"
       [floor]="apartament.floor"
       [member_amount]="apartament.member_amount"
@@ -17,7 +34,7 @@
     </app-apartament-list-item>
   </div>
   
-  <div *ngIf="apartaments.length === 0" class="no-data">
+  <div *ngIf="filteredApartaments.length === 0" class="no-data">
     <p>Няма добавени апартаменти</p>
   </div>
 </div>

@@ -37,6 +37,11 @@ export class Sidebar {
         routerLink: '/manage'
       },
       {
+        label: 'Такси',
+        icon: 'pi pi-file-invoice',
+        routerLink: '/invoices'
+      },
+      {
         label: 'Каса',
         icon: 'pi pi-wallet',
         routerLink: '/checkout'
