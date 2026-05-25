@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
+import { BUILD_VERSION } from '../../config/build-info';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,6 +14,7 @@ import { MenuItem } from 'primeng/api';
 })
 export class Sidebar {
   menuItems: MenuItem[] = [];
+  appVersion = BUILD_VERSION;
 
   constructor() {
     this.menuItems = [
