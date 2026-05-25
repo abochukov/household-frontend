@@ -63,6 +63,14 @@ export interface YearlyTotalRow {
   total_sum: number | null;
 }
 
+export interface PayMonthResponse {
+  success: boolean;
+  paid_amount: number;
+  already_paid: boolean;
+  email_sent: boolean;
+  sms_sent: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -118,8 +126,8 @@ export class TotalSumService {
     month: MonthColumn;
     paid_by?: string;
     note?: string;
-  }): Observable<{ success: boolean; paid_amount: number; already_paid: boolean }> {
-    return this.http.post<{ success: boolean; paid_amount: number; already_paid: boolean }>(
+  }): Observable<PayMonthResponse> {
+    return this.http.post<PayMonthResponse>(
       `${this.apiUrl}/pay-month`,
       payload,
       {
