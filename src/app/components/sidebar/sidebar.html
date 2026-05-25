@@ -1,6 +1,86 @@
 <div class="sidebar-container">
+
+  <!-- LOGO -->
   <div class="sidebar-header">
-    <h3>Домова книга</h3>
+
+    <div class="logo-wrapper">
+
+      <div class="logo-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+
+      <h2>
+        Domova<span>Kniga</span>
+      </h2>
+
+    </div>
+
   </div>
-  <p-menu [model]="menuItems" styleClass="sidebar-menu"></p-menu>
+
+  <!-- MENU -->
+  <div class="sidebar-menu">
+
+    <a
+      *ngFor="let item of menuItems"
+      [routerLink]="item.routerLink"
+      routerLinkActive="active-menu-item"
+      class="menu-item"
+    >
+
+      <i [class]="item.icon"></i>
+
+      <span>
+        {{ item.label }}
+      </span>
+
+    </a>
+
+  </div>
+
+  <!-- SUPPORT CARD -->
+  <div class="support-card">
+
+    <div class="support-icon">
+      <i class="fas fa-comment-dots"></i>
+    </div>
+
+    <div class="support-content">
+
+      <h4>
+        Нуждаете се от помощ?
+      </h4>
+
+      <p>
+        Свържете се с нас
+      </p>
+
+    </div>
+
+    <i class="fas fa-chevron-right arrow-icon"></i>
+
+  </div>
+
+  <!-- USER -->
+  <div class="sidebar-user">
+
+    <div class="user-avatar">
+      A
+    </div>
+
+    <div class="user-info">
+
+      <h5>
+        Админ
+      </h5>
+
+      <span>
+        администратор
+      </span>
+
+    </div>
+
+    <i class="fas fa-chevron-down"></i>
+
+  </div>
+
 </div>

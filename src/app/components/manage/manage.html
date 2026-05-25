@@ -2,17 +2,19 @@
   <h2>Управление на апартаменти</h2>
 
   <div class="filters">
-    <label for="address-filter">Филтър по адрес</label>
-    <select
-      id="address-filter"
-      [value]="selectedAddressId ?? ''"
-      (change)="onAddressFilterChange($any($event.target).value)"
-    >
-      <option value="">Всички адреси</option>
-      <option *ngFor="let address of addresses" [value]="address.address_id">
-        {{ address.city }}, {{ address.address }}, вход {{ address.entrance }}
-      </option>
-    </select>
+    <div class="filter-field">
+      <label for="address-filter">Филтър по адрес</label>
+      <select
+        id="address-filter"
+        [value]="selectedAddressId ?? ''"
+        (change)="onAddressFilterChange($any($event.target).value)"
+      >
+        <option value="">Всички адреси</option>
+        <option *ngFor="let address of addresses" [value]="address.address_id">
+          {{ address.city }}, {{ address.address }}, вход {{ address.entrance }}
+        </option>
+      </select>
+    </div>
 
     <button type="button" class="clear-btn" (click)="clearFilters()">Изчисти</button>
   </div>
