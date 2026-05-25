@@ -1,7 +1,24 @@
-<div class="create-address-container">
-  <div class="title">Вашите адреси</div>
-  
-  <div class="existing-addresses" *ngIf="addresses.length > 0">
+<div class="create-address-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h1>Вашите адреси</h1>
+
+    <button class="add-btn">
+      + Нов адрес
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Търсене по адрес, град или вход..."
+    />
+  </div>
+
+  <!-- Existing Addresses -->
+  <div class="address-table-card" *ngIf="addresses.length > 0">
     <table>
       <thead>
         <tr>
@@ -11,72 +28,160 @@
           <th>Действия</th>
         </tr>
       </thead>
+
       <tbody>
         <tr *ngFor="let address of addresses">
-          <td>{{ address.city }}, {{ address.neighbourhood }}</td>
-          <td>{{ address.address }}, Вход: {{ address.entrance }}</td>
-          <td>{{ address.created_at | date:'dd.MM.yyyy' }}</td>
           <td>
-            <button class="custom-btn" (click)="handleEdit(address)">Редактиране</button>
-            <button class="custom-btn-danger" (click)="handleDelete(address.address_id!)">Изтриване</button>
+            {{ address.city }},
+            <br />
+            {{ address.neighbourhood }}
+          </td>
+
+          <td>
+            {{ address.address }},
+            Вход: {{ address.entrance }}
+          </td>
+
+          <td>
+            {{ address.created_at | date:'dd.MM.yyyy' }}
+          </td>
+
+          <td class="actions">
+            <button
+              class="edit-btn"
+              (click)="handleEdit(address)"
+            >
+              Редактиране
+            </button>
+
+            <button
+              class="delete-btn"
+              (click)="handleDelete(address.address_id!)"
+            >
+              Изтриване
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="no-data" *ngIf="addresses.length === 0">
+  <!-- Empty State -->
+  <div class="empty-card" *ngIf="addresses.length === 0">
     <p>Няма създадени адреси</p>
   </div>
 
-  <form [formGroup]="addressForm" (ngSubmit)="submitHandler()" class="create-address-form">
-    <div class="title">{{ selectedAddress ? 'Редактиране на адрес' : 'Създаване на нов адрес' }}</div>
+  <!-- Form -->
+  <div class="form-card">
+    <h2>
+      {{ selectedAddress ? 'Редактиране на адрес' : 'Създаване на нов адрес' }}
+    </h2>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Град <span class="required-field">*</span></label>
-        <input type="text" formControlName="city" [class.invalid]="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
-        <div class="error-message" *ngIf="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
-          Моля, въведете град
+    <form
+      [formGroup]="addressForm"
+      (ngSubmit)="submitHandler()"
+    >
+
+      <div class="grid-2">
+
+        <!-- City -->
+        <div class="form-group">
+          <label>Град *</label>
+
+          <input
+            type="text"
+            formControlName="city"
+            placeholder="Изберете град"
+            [class.invalid]="addressForm.get('city')?.invalid && addressForm.get('city')?.touched"
+          />
+
+          <span
+            class="error"
+            *ngIf="addressForm.get('city')?.invalid && addressForm.get('city')?.touched"
+          >
+            Моля, въведете град
+          </span>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label>Квартал</label>
-        <input type="text" formControlName="neighbourhood">
-      </div>
-    </div>
+        <!-- Neighbourhood -->
+        <div class="form-group">
+          <label>Квартал</label>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Адрес <span class="required-field">*</span></label>
-        <input type="text" formControlName="address" [class.invalid]="addressForm.get('address')?.invalid && addressForm.get('address')?.touched">
-        <div class="error-message" *ngIf="addressForm.get('address')?.invalid && addressForm.get('address')?.touched">
-          Моля, въведете точен адрес
+          <input
+            type="text"
+            formControlName="neighbourhood"
+            placeholder="Изберете квартал"
+          />
         </div>
-      </div>
 
-      <div class="form-group">
-        <label>Вход <span class="required-field">*</span></label>
-        <input type="text" formControlName="entranceId" [class.invalid]="addressForm.get('entranceId')?.invalid && addressForm.get('entranceId')?.touched">
-        <div class="error-message" *ngIf="addressForm.get('entranceId')?.invalid && addressForm.get('entranceId')?.touched">
-          Моля, въведете вход
+        <!-- Address -->
+        <div class="form-group">
+          <label>Адрес *</label>
+
+          <input
+            type="text"
+            formControlName="address"
+            placeholder="Въведете адрес"
+            [class.invalid]="addressForm.get('address')?.invalid && addressForm.get('address')?.touched"
+          />
+
+          <span
+            class="error"
+            *ngIf="addressForm.get('address')?.invalid && addressForm.get('address')?.touched"
+          >
+            Моля, въведете адрес
+          </span>
         </div>
-      </div>
-    </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Брой етажи <span class="required-field">*</span></label>
-        <input type="number" formControlName="floors" [class.invalid]="addressForm.get('floors')?.invalid && addressForm.get('floors')?.touched">
-        <div class="error-message" *ngIf="addressForm.get('floors')?.invalid && addressForm.get('floors')?.touched">
+        <!-- Entrance -->
+        <div class="form-group">
+          <label>Вход *</label>
+
+          <input
+            type="text"
+            formControlName="entranceId"
+            placeholder="Въведете вход"
+            [class.invalid]="addressForm.get('entranceId')?.invalid && addressForm.get('entranceId')?.touched"
+          />
+
+          <span
+            class="error"
+            *ngIf="addressForm.get('entranceId')?.invalid && addressForm.get('entranceId')?.touched"
+          >
+            Моля, въведете вход
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Floors -->
+      <div class="form-group full-width">
+        <label>Брой етажи *</label>
+
+        <input
+          type="number"
+          formControlName="floors"
+          placeholder="Въведете брой етажи"
+          [class.invalid]="addressForm.get('floors')?.invalid && addressForm.get('floors')?.touched"
+        />
+
+        <span
+          class="error"
+          *ngIf="addressForm.get('floors')?.invalid && addressForm.get('floors')?.touched"
+        >
           Моля, въведете брой етажи
-        </div>
+        </span>
       </div>
-    </div>
 
-    <button type="submit" class="custom-btn-success" [disabled]="addressForm.invalid">
-      {{ selectedAddress ? 'Запази промените' : 'Запази' }}
-    </button>
-  </form>
+      <button
+        type="submit"
+        class="save-btn"
+        [disabled]="addressForm.invalid"
+      >
+        {{ selectedAddress ? 'Запази промените' : 'Запази адрес' }}
+      </button>
+
+    </form>
+  </div>
+
 </div>

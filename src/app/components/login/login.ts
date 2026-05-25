@@ -1,11 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+  FormGroup
+} from '@angular/forms';
+
+import {
+  CommonModule,
+  NgClass
+} from '@angular/common';
+
+import {
+  Router,
+  RouterLink
+} from '@angular/router';
 
 import { ApiServiceTs } from '../../service/api.service.ts.js';
 
-// PrimeNG imports
+// PrimeNG
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -15,70 +29,113 @@ import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
+
+  standalone: true,
+
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
+    CommonModule,
+    ReactiveFormsModule,
     RouterLink,
+    NgClass,
+
     CardModule,
     InputTextModule,
     PasswordModule,
     ButtonModule,
     ToastModule
   ],
+
   providers: [MessageService],
+
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class Login {
-  
-  loginForm: any;
+
+export class Login implements OnInit {
+
+  loginForm!: FormGroup;
+
   message: string = '';
 
+  showPassword: boolean = false;
+
   constructor(
-    private apiService: ApiServiceTs, 
+    private apiService: ApiServiceTs,
     private fb: FormBuilder,
     private router: Router,
     private messageService: MessageService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+
+      password: [
+        '',
+        Validators.required
+      ]
+
     });
+
   }
 
+  submit(): void {
 
-  submit() {
     if (this.loginForm.valid) {
-      this.apiService.login(this.loginForm.value)
+
+      this.apiService
+        .login(this.loginForm.value)
+
         .subscribe({
+
           next: () => {
+
             console.log('Login successful');
-            this.messageService.add({ 
-              severity: 'success', 
-              summary: 'Успешен вход', 
-              detail: 'Добре дошъл!' 
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Успешен вход',
+              detail: 'Добре дошъл!'
             });
+
             setTimeout(() => {
               this.router.navigate(['/home']);
             }, 1000);
+
           },
+
           error: () => {
+
             console.log('Invalid credentials');
-            this.messageService.add({ 
-              severity: 'error', 
-              summary: 'Грешка', 
-              detail: 'Невалиден имейл или парола' 
+
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Грешка',
+              detail: 'Невалиден имейл или парола'
             });
+
           }
+
         });
+
     } else {
-      this.messageService.add({ 
-        severity: 'warn', 
-        summary: 'Внимание', 
-        detail: 'Моля попълнете всички полета правилно' 
+
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Внимание',
+        detail: 'Моля попълнете всички полета правилно'
       });
+
     }
+
   }
+
 }

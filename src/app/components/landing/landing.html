@@ -1,129 +1,258 @@
-<header>
-  <nav class="navbar navbar-expand-lg navbar-light navbar-float">
-    <div class="container">
-      <a routerLink="/" class="navbar-brand">Domova<span class="text-primary">Kniga</span></a>
+<header class="hero-section">
+  <nav class="navbar navbar-expand-lg custom-navbar">
+    <div class="container nav-wrapper">
 
-      <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent" 
-              aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <!-- LOGO -->
+      <a routerLink="/" class="navbar-brand">
+        <div class="logo-box">
+          <i class="fas fa-book-open"></i>
+        </div>
+
+        <span class="logo-text">
+          Domova<span>Kniga</span>
+        </span>
+      </a>
+
+      <!-- MOBILE -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarContent"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
+
+      <!-- MENU -->
+      <div class="collapse navbar-collapse" id="navbarContent">
+
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Начало</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#about">
+              За приложението
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#features">
+              Функционалности
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#users">
+              За кого е
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#contacts">
+              Контакти
+            </a>
+          </li>
+        </ul>
+
+        <!-- ACTIONS -->
+        <div class="nav-actions">
+          <a routerLink="/login" class="btn-login">
+            Вход
+          </a>
+
+          <a routerLink="/signup" class="btn-register">
+            Регистрация
+          </a>
+        </div>
+
+      </div>
     </div>
   </nav>
 
-  <div class="page-banner home-banner">
-    <div class="container h-100">
-      <div class="row align-items-center h-100">
-        <div class="col-lg-6 py-3 wow fadeInUp">
-          <h1 class="mb-4">Домова книга</h1>
-          <p class="text-lg mb-5">Нашето приложение "Домова книга" предоставя удобно и ефективно решение за домоуправители, собственици и мениджъри на сгради, като улеснява управлението на всички важни данни, свързани с даден имот.</p>
+  <!-- HERO -->
+  <div class="container hero-content">
+    <div class="row align-items-center">
+      <div class="col-lg-6 hero-text">
+        <div class="hero-badge">
+          ✨ Вашият дигитален помощник
+        </div>
 
-          <a routerLink="/login">Вход</a> | <a routerLink="/signup">Регистрация</a>
+        <h1>
+          Домова книга
+        </h1>
+
+        <h2>
+          Всичко под контрол.<br />
+          Навсякъде. По всяко време.
+        </h2>
+
+        <p>
+          Нашето приложение предоставя удобно и ефективно решение
+          за домоуправители, собственици и мениджъри на сгради,
+          като улеснява управлението на всички важни данни,
+          свързани с даден имот.
+        </p>
+
+        <div class="hero-actions">
+          <a routerLink="/signup" class="btn-primary-custom">
+            Регистрирай се безплатно
+          </a>
+
+          <a href="#features" class="btn-secondary-custom">
+            Научи повече
+          </a>
         </div>
-        <div class="col-lg-6 py-3 wow zoomIn">
-          <div class="img-place">
-            <img src="assets/landing/bg_image_1.png" alt="Background" />
-          </div>
+
+        <div class="hero-features">
+          <span>✔ Сигурно и надеждно</span>
+          <span>✔ Спестява време</span>
+          <span>✔ Достъпно навсякъде</span>
         </div>
+      </div>
+
+      <div class="col-lg-6 hero-image">
+        <img
+          src="assets/landing/bg_image_1.png"
+          alt="Dashboard"
+          class="img-fluid"
+        />
       </div>
     </div>
   </div>
 </header>
 
-<main>
-  <div class="page-section features">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4 py-3 wow fadeInUp">
-          <div class="d-flex flex-row">
-            <div class="img-fluid mr-3">
-              <img src="assets/landing/icon_pattern.svg" alt="Icon" />
-            </div>
-            <div>
-              <h4>Какво представлява "Домова книга"?</h4>
-              <p>"Домова книга" е дигитална платформа, която централизира информацията за сгради, имоти и техните обитатели. Чрез нея можеш да съхраняваш и управляваш информация за адреси, собственици, наематели, плащания, ремонти и важни събития.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4 py-3 wow fadeInUp">
-          <div class="d-flex flex-row">
-            <div class="img-fluid mr-3">
-              <img src="assets/landing/icon_pattern.svg" alt="Icon" />
-            </div>
-            <div>
-              <h4> Основни функционалности на приложението</h4>
-              <p>
-                ✔ Управление на адреси и сгради<br/>
-                ✔ Управление на собственици и наематели<br/>
-                ✔ Поддръжка на финансови данни
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4 py-3 wow fadeInUp">
-          <div class="d-flex flex-row">
-            <div class="img-fluid mr-3">
-              <img src="assets/landing/icon_pattern.svg" alt="Icon" />
-            </div>
-            <div>
-              <h4>За кого е предназначено приложението?</h4>
-              <p>
-                ✔ Домоуправители – за по-лесно управление на входове и блокове<br/>
-                ✔ Мениджъри на сгради – за контрол на няколко обекта наведнъж<br/>
-                ✔ Собственици на няколко имота – за проследяване на наематели и плащания<br/>
-                ✔ Фирми за управление на недвижими имоти – за централизирано управление на данни
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
-
-<div class="page-section">
+<!-- FEATURES -->
+<section id="features" class="features-section">
   <div class="container">
-    <div class="text-center wow fadeInUp">
-      <div class="subhead">Защо да избереш "Домова книга"?</div>
-      <h2 class="title-section">Регистрирай се напълно <span class="marked">безплатно</span></h2>
-      <div class="divider mx-auto"></div>
+
+    <div class="section-heading">
+      <span>Всичко, от което имате нужда</span>
+      <h2>Основни функционалности</h2>
     </div>
 
-    <div class="row mt-5 text-center">
-      <div class="col-lg-4 py-3 wow fadeInUp">
-        <div class="display-3"><span class="mai-shapes"></span></div>
-        <h5>Спестяване на  време</h5>
-        <p>Елиминира нуждата от тетрадки и хаотично водене на записки</p>
-      </div>
-      <div class="col-lg-4 py-3 wow fadeInUp">
-        <div class="display-3"><span class="mai-shapes"></span></div>
-        <h5>Достъпност от всяко устройство </h5>
-        <p>Използвай я на компютър, таблет или телефон</p>
-      </div>
-      <div class="col-lg-4 py-3 wow fadeInUp">
-        <div class="display-3"><span class="mai-shapes"></span></div>
-        <h5>Лесен и интуитивен интерфейс</h5>
-        <p>Подходящ за всеки, без сложни настройки</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<footer class="page-footer">
-  <div class="container">
     <div class="row">
-      <div class="col-sm-6 py-2">
-        <p id="copyright">&copy; 2025 <a href="https://macodeid.com/">MACode ID</a>. All rights reserved</p>
-      </div>
-      <div class="col-sm-6 py-2 text-right">
-        <div class="d-inline-block px-3">
-          <a href="#">Privacy</a>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="feature-card">
+          <div class="icon-box purple">
+            <i class="fas fa-book"></i>
+          </div>
+
+          <h4>Какво представлява "Домова книга"?</h4>
+
+          <p>
+            Дигитална платформа, която централизира информацията
+            за сгради, имоти и техните обитатели.
+          </p>
+
+          <a href="#">Научи повече →</a>
         </div>
-        <div class="d-inline-block px-3">
-          <a href="#">Contact Us</a>
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="feature-card">
+          <div class="icon-box blue">
+            <i class="fas fa-building"></i>
+          </div>
+
+          <h4>Основни функционалности</h4>
+
+          <ul>
+            <li>Управление на адреси и сгради</li>
+            <li>Управление на собственици</li>
+            <li>Поддръжка на финансови данни</li>
+          </ul>
+
+          <a href="#">Виж всички функции →</a>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="feature-card">
+          <div class="icon-box orange">
+            <i class="fas fa-users"></i>
+          </div>
+
+          <h4>За кого е предназначено?</h4>
+
+          <ul>
+            <li>Домоуправители</li>
+            <li>Мениджъри на сгради</li>
+            <li>Собственици на имоти</li>
+            <li>Фирми за управление</li>
+          </ul>
+
+          <a href="#">Виж повече →</a>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <div class="col-lg-6 cta-left">
+        <span>ЗАЩО ДА ИЗБЕРЕШ "ДОМОВА КНИГА"?</span>
+
+        <h2>
+          Регистрирай се напълно
+          <strong>безплатно</strong>
+        </h2>
+
+        <p>
+          Без скрити такси. Без обвързване.
+          Създай своя профил и започни веднага.
+        </p>
+
+        <a routerLink="/signup" class="btn-cta">
+          Регистрирай се безплатно
+        </a>
+
+        <small>✔ Не е необходима кредитна карта</small>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="cta-benefits">
+
+          <div class="benefit-item">
+            <div class="benefit-icon purple-bg">
+              <i class="fas fa-clock"></i>
+            </div>
+
+            <div>
+              <h5>Спестяване на време</h5>
+              <p>
+                Елиминира нуждата от тетрадки и хаотично водене на записки.
+              </p>
+            </div>
+          </div>
+
+          <div class="benefit-item">
+            <div class="benefit-icon pink-bg">
+              <i class="fas fa-desktop"></i>
+            </div>
+
+            <div>
+              <h5>Достъпност от всяко устройство</h5>
+              <p>
+                Използвай я на компютър, таблет или телефон.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>© 2025 DomovaKniga. Всички права запазени.</p>
   </div>
 </footer>

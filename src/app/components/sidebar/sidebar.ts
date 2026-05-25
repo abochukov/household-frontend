@@ -38,7 +38,7 @@ export class Sidebar {
       },
       {
         label: 'Такси',
-        icon: 'pi pi-file-invoice',
+        icon: 'pi pi-credit-card',
         routerLink: '/invoices'
       },
       {

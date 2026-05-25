@@ -1,38 +1,201 @@
-<div class='login-wrapper'>
-  <div class='login-container'>
-    <div>
-      <h2>Вход</h2>
+<div class="auth-page">
+
+  <!-- LEFT SIDE -->
+  <div class="auth-left">
+
+    <!-- LOGO -->
+    <div class="logo">
+      <div class="logo-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+
+      <h2>
+        Domova<span>Kniga</span>
+      </h2>
     </div>
-    <div class='form-container'>
-      <form [formGroup]="loginForm" (ngSubmit)="submit()">
-        <div class='username'>
-          <label>Email:</label>
+
+    <!-- CONTENT -->
+    <div class="auth-content">
+
+      <div class="auth-badge">
+        Вашият дигитален помощник
+      </div>
+
+      <h1>
+        Управлявай всичко<br />
+        на едно място
+      </h1>
+
+      <p>
+        Домова книга ти помага да организираш
+        адреси, входове, собственици, плащания
+        и важни данни бързо и лесно.
+      </p>
+
+      <!-- HERO IMAGE -->
+      <div class="auth-image">
+        <img
+          src="assets/login/dashboard-preview.png"
+          alt="Dashboard Preview"
+        />
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="auth-right">
+
+    <div class="login-card">
+
+      <!-- MOBILE LOGO -->
+      <div class="mobile-logo">
+        <div class="logo-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+
+        <h2>
+          Domova<span>Kniga</span>
+        </h2>
+      </div>
+
+      <!-- HEADER -->
+      <div class="login-header">
+        <h2>Вход в системата</h2>
+
+        <p>
+          Въведете вашите данни за достъп
+        </p>
+      </div>
+
+      <!-- FORM -->
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="submit()"
+      >
+
+        <!-- EMAIL -->
+        <div class="form-group">
+
+          <label>Email</label>
+
           <input
-            id="email"
             type="email"
             formControlName="email"
-            [class.input-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+            placeholder="Въведете вашия email"
+
+            [class.input-error]="
+              loginForm.get('email')?.invalid &&
+              loginForm.get('email')?.touched
+            "
+          />
+
+          <small
+            *ngIf="
+              loginForm.get('email')?.invalid &&
+              loginForm.get('email')?.touched
+            "
           >
-          <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-            Въведи валиден имейл.
-          </div>
+            Въведете валиден email.
+          </small>
+
         </div>
-        <div class='password'>
-          <label>Парола:</label>
-          <input id="password" type="password" formControlName="password">
-          <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+
+        <!-- PASSWORD -->
+        <div class="form-group">
+
+          <label>Парола</label>
+
+          <div class="password-wrapper">
+
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Въведете вашата парола"
+
+              [class.input-error]="
+                loginForm.get('password')?.invalid &&
+                loginForm.get('password')?.touched
+              "
+            />
+
+            <!-- TOGGLE -->
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="showPassword = !showPassword"
+            >
+
+              <i
+                class="fas"
+                [ngClass]="
+                  showPassword
+                    ? 'fa-eye-slash'
+                    : 'fa-eye'
+                "
+              ></i>
+
+            </button>
+
+          </div>
+
+          <small
+            *ngIf="
+              loginForm.get('password')?.invalid &&
+              loginForm.get('password')?.touched
+            "
+          >
             Паролата е задължителна.
-          </div>
+          </small>
+
         </div>
 
-        <button type="submit" [disabled]="loginForm.invalid" class="login-button">Вход</button>
+        <!-- OPTIONS -->
+        <div class="login-options">
+
+          <label class="remember-me">
+
+            <input type="checkbox" />
+
+            <span>
+              Запомни ме
+            </span>
+
+          </label>
+
+          <a href="#">
+            Забравена парола?
+          </a>
+
+        </div>
+
+        <!-- BUTTON -->
+        <button
+          type="submit"
+          class="login-button"
+          [disabled]="loginForm.invalid"
+        >
+          Вход
+        </button>
+
       </form>
+
+      <!-- FOOTER -->
+      <div class="login-footer">
+
+        <p>
+          Все още нямаш акаунт?
+        </p>
+
+        <a [routerLink]="['/signup']">
+          Регистрирай се тук
+        </a>
+
+      </div>
+
     </div>
 
-    <div class='login-footer'>
-      <p>
-        Все още нямаш акаунт?<br/> <a [routerLink]="['/signup']">Регистрирай се тук</a>
-      </p>
-    </div>
   </div>
+
 </div>

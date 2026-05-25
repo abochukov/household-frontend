@@ -5,7 +5,11 @@
   </label>
 
   <div class="radio-group">
-    <div *ngFor="let address of addresses" class="radio-item">
+    <div
+      *ngFor="let address of addresses"
+      class="radio-item"
+      [class.selected]="control.value === address.address_id"
+    >
       <p-radiobutton
         [formControl]="control"
         [inputId]="'address-' + address.address_id"
