@@ -12,10 +12,12 @@ import { Invoices } from './components/invoices/invoices';
 import { authGuard } from './guards/auth.guard';
 import { Help } from './components/help/help';
 import { UserProfileComponent } from './components/user-profile/user-profile';
+import { Signup } from './components/signup/signup';
 
 export const routes: Routes = [
     { path: '', component: LandingComponent },
     { path: 'login', component: Login },
+    { path: 'signup', component: Signup },
     { path: 'home', component: Home, canActivate: [authGuard] },
     { path: 'checkout', component: Checkout, canActivate: [authGuard] },
     { path: 'manage', component: Manage, canActivate: [authGuard] },

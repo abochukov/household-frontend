@@ -12,6 +12,26 @@ export class ApiServiceTs {
 
   constructor(private http: HttpClient) {}
 
+  signup(data: {
+    username: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    password: string;
+    phone?: string;
+  }) {
+    return this.http.post<{
+      success: boolean;
+      message: string;
+      email: string;
+      verification_preview_url?: string;
+    }>(
+      `${this.baseUrl}/auth/signup`,
+      data,
+      { withCredentials: true }
+    );
+  }
+
   getHello(): Observable<string> {
     return this.http.get(this.baseUrl, {responseType: 'text'});
   }

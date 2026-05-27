@@ -18,14 +18,13 @@ import {
 } from '@angular/router';
 
 import { ApiServiceTs } from '../../service/api.service.ts.js';
+import { ToastService } from '../../services/toast.service';
 
 // PrimeNG
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
@@ -41,11 +40,8 @@ import { MessageService } from 'primeng/api';
     CardModule,
     InputTextModule,
     PasswordModule,
-    ButtonModule,
-    ToastModule
+    ButtonModule
   ],
-
-  providers: [MessageService],
 
   templateUrl: './login.html',
   styleUrl: './login.scss'
@@ -63,7 +59,7 @@ export class Login implements OnInit {
     private apiService: ApiServiceTs,
     private fb: FormBuilder,
     private router: Router,
-    private messageService: MessageService
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -100,11 +96,7 @@ export class Login implements OnInit {
 
             console.log('Login successful');
 
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Успешен вход',
-              detail: 'Добре дошъл!'
-            });
+            this.toastService.showSuccess('Добре дошъл!', 'Успешен вход');
 
             setTimeout(() => {
               this.router.navigate(['/home']);
@@ -112,15 +104,23 @@ export class Login implements OnInit {
 
           },
 
-          error: () => {
+          error: (error) => {
 
             console.log('Invalid credentials');
+            const backendMessage = error?.error?.message;
+            const status = error?.status;
 
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Грешка',
-              detail: 'Невалиден имейл или парола'
-            });
+            let detail = 'Невалиден имейл или парола';
+
+            if (status === 401 && backendMessage === 'Invalid credentials') {
+              detail = 'Грешен имейл или парола';
+            } else if (status === 401 && backendMessage === 'Account is not verified') {
+              detail = 'Акаунтът не е верифициран. Проверете имейла си за потвърждение.';
+            } else if (typeof backendMessage === 'string' && backendMessage.trim()) {
+              detail = backendMessage;
+            }
+
+            this.toastService.showError(detail);
 
           }
 
@@ -128,11 +128,7 @@ export class Login implements OnInit {
 
     } else {
 
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Внимание',
-        detail: 'Моля попълнете всички полета правилно'
-      });
+      this.toastService.showWarning('Моля попълнете всички полета правилно');
 
     }
 
