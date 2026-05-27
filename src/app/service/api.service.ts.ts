@@ -32,6 +32,29 @@ export class ApiServiceTs {
     );
   }
 
+  forgotPassword(data: { email: string }) {
+    return this.http.post<{
+      success: boolean;
+      message: string;
+      reset_preview_url?: string;
+    }>(
+      `${this.baseUrl}/auth/forgot-password`,
+      data,
+      { withCredentials: true }
+    );
+  }
+
+  resetPassword(data: { token: string; newPassword: string }) {
+    return this.http.post<{
+      success: boolean;
+      message: string;
+    }>(
+      `${this.baseUrl}/auth/reset-password`,
+      data,
+      { withCredentials: true }
+    );
+  }
+
   getHello(): Observable<string> {
     return this.http.get(this.baseUrl, {responseType: 'text'});
   }

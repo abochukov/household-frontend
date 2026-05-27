@@ -17,7 +17,7 @@ export class App {
   protected readonly title = signal('household-angular');
   showAppShell = false;
 
-  private readonly publicPaths = new Set<string>(['/', '/login', '/signup']);
+  private readonly publicPaths = new Set<string>(['/', '/login', '/signup', '/forgot-password', '/reset-password']);
 
   constructor(
     private router: Router,
