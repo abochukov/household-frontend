@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faGear, faBell, faUser } from '@fortawesome/free-solid-svg-icons';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -23,10 +24,20 @@ export class Header implements OnInit {
   faBell = faBell;
   faUser = faUser;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
-    this.username = localStorage.getItem('username');
+    this.userService.getCurrentUser().subscribe({
+      next: (user) => {
+        this.username = user.username || user.email || null;
+      },
+      error: () => {
+        this.username = null;
+      }
+    });
   }
 
   @HostListener('document:mousedown', ['$event'])
@@ -49,6 +60,6 @@ export class Header implements OnInit {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     this.username = null;
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 }

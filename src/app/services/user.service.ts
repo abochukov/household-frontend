@@ -5,6 +5,7 @@ import { API_BASE_URL } from '../config/api.config';
 
 export interface User {
   email: string;
+  username?: string;
 }
 
 @Injectable({
