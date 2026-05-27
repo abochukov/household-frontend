@@ -11,6 +11,7 @@ import { ApartamentDetails } from './components/manage/apartament-details';
 import { Invoices } from './components/invoices/invoices';
 import { authGuard } from './guards/auth.guard';
 import { Help } from './components/help/help';
+import { UserProfileComponent } from './components/user-profile/user-profile';
 
 export const routes: Routes = [
     { path: '', component: LandingComponent },
@@ -22,6 +23,7 @@ export const routes: Routes = [
     { path: 'create-address', component: CreateAddress, canActivate: [authGuard] },
     { path: 'create-property', component: CreateProperty, canActivate: [authGuard] },
     { path: 'invoices', component: Invoices, canActivate: [authGuard] },
+    { path: 'user-profile', component: UserProfileComponent, canActivate: [authGuard] },
     { path: 'help', component: Help, canActivate: [authGuard] },
     { path: '**', redirectTo: '/' }
 ];

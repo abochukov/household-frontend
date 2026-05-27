@@ -1,0 +1,37 @@
+<section class="profile-page">
+  <h1>Потребителски профил</h1>
+
+  <p class="loading" *ngIf="loading">Зареждане на профила...</p>
+
+  <div class="profile-grid" *ngIf="!loading">
+    <div class="field">
+      <label>Username</label>
+      <div class="value">{{ profile?.username || '-' }}</div>
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <div class="value">{{ profile?.email || '-' }}</div>
+    </div>
+
+    <div class="field">
+      <label>First Name</label>
+      <div class="value">{{ profile?.firstname || '-' }}</div>
+    </div>
+
+    <div class="field">
+      <label>Last Name</label>
+      <div class="value">{{ profile?.lastname || '-' }}</div>
+    </div>
+
+    <div class="field">
+      <label>Phone</label>
+      <div class="value">{{ profile?.phone || '-' }}</div>
+    </div>
+
+    <div class="field">
+      <label>Created At</label>
+      <div class="value">{{ formatCreatedAt(profile?.created_at) }}</div>
+    </div>
+  </div>
+</section>

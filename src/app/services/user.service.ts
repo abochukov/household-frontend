@@ -3,9 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '../config/api.config';
 
-export interface User {
-  email: string;
+export interface UserProfile {
+  email: string | null;
   username?: string;
+  firstname?: string | null;
+  lastname?: string | null;
+  phone?: string | null;
+  created_at?: string | null;
 }
 
 export interface LogoutResponse {
@@ -27,8 +31,8 @@ export class UserService {
     });
   }
 
-  getCurrentUser(): Observable<User> {
-    return this.http.get<User>(this.apiUrl, {
+  getCurrentUser(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(this.apiUrl, {
       headers: this.getHeaders(),
       withCredentials: true
     });
