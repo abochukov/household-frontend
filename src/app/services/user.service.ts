@@ -8,6 +8,10 @@ export interface User {
   username?: string;
 }
 
+export interface LogoutResponse {
+  success: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,6 +29,13 @@ export class UserService {
 
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(this.apiUrl, {
+      headers: this.getHeaders(),
+      withCredentials: true
+    });
+  }
+
+  logout(): Observable<LogoutResponse> {
+    return this.http.post<LogoutResponse>(`${this.baseUrl}/auth/logout`, {}, {
       headers: this.getHeaders(),
       withCredentials: true
     });

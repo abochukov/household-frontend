@@ -57,9 +57,19 @@ export class Header implements OnInit {
   }
 
   handleSignOut() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    this.username = null;
-    this.router.navigate(['/login']);
+    this.userService.logout().subscribe({
+      next: () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        this.username = null;
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        this.username = null;
+        this.router.navigate(['/login']);
+      }
+    });
   }
 }
