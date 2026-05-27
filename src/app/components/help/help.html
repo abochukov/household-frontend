@@ -1,0 +1,71 @@
+<section class="help-page">
+  <div class="help-header">
+    <h1>Помощ и контакт</h1>
+    <p>
+      Имате въпрос за платформата, плащанията или управлението на обекти?
+      Свържете се с нас и ще получите съдействие в най-кратък срок.
+    </p>
+  </div>
+
+  <div class="help-grid">
+    <article class="contact-card">
+      <h3>Бърза връзка</h3>
+
+      <div class="contact-item">
+        <i class="fas fa-phone"></i>
+        <div>
+          <span>Телефон</span>
+          <a href="tel:+359888123456">+359 888 123 456</a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <i class="fas fa-envelope"></i>
+        <div>
+          <span>Имейл</span>
+          <a href="mailto:support@domovakniga.bg">support@domovakniga.bg</a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <i class="fas fa-clock"></i>
+        <div>
+          <span>Работно време</span>
+          <p>Понеделник - Петък, 09:00 - 18:00</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="form-card">
+      <h3>Изпратете съобщение</h3>
+
+      <form [formGroup]="contactForm" (ngSubmit)="submitContactForm()" novalidate>
+        <label>
+          Име и фамилия
+          <input type="text" formControlName="fullName" placeholder="Напр. Иван Петров" />
+        </label>
+
+        <label>
+          Имейл
+          <input type="email" formControlName="email" placeholder="example@email.com" />
+        </label>
+
+        <label>
+          Тема
+          <input type="text" formControlName="topic" placeholder="Какъв е казусът?" />
+        </label>
+
+        <label>
+          Съобщение
+          <textarea rows="5" formControlName="message" placeholder="Опишете проблема или въпроса си"></textarea>
+        </label>
+
+        <p class="error-text" *ngIf="submitted && contactForm.invalid">
+          Моля попълнете всички полета коректно.
+        </p>
+
+        <button type="submit">Изпрати запитване</button>
+      </form>
+    </article>
+  </div>
+</section>

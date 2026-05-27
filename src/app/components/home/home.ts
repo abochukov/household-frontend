@@ -22,7 +22,7 @@ export class Home implements OnInit {
     // Вземи user info от session
     this.apiService.getMe().subscribe({
       next: (user: any) => {
-        this.username = user.email;
+        this.username = user.email ?? null;
       },
       error: () => {
         this.router.navigate(['/login']);

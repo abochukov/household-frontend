@@ -55,7 +55,7 @@ export class CreateProperty implements OnInit {
     // Get current user from session
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
-        this.currentUserEmail = user.email;
+        this.currentUserEmail = user.email ?? '';
         this.loadAddresses();
       },
       error: (err) => {

@@ -1,19 +1,37 @@
-<div class="header-wrapper">
-  <div class="toolbar-panel">
-    <ul class="toolbar">
-      <li style="position: relative">
-        <fa-icon [icon]="faUser" #userIconRef (click)="handleUserClick()"></fa-icon>
-        <span style="padding-left: 10px" (click)="handleUserClick()">{{ username }}</span>
-        <div class="dropdown" *ngIf="userDropdownVisible" #userDropdownRef>
-          <ul>
-            <li>Всички адреси</li>
-            <li>
-              <a routerLink="/userProfile">Профил</a>
-            </li>
-            <li (click)="handleSignOut()">Излизане</li>
-          </ul>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
+<header class="header-wrapper">
+  <nav class="custom-navbar">
+    <div class="container nav-wrapper">
+      <ul class="toolbar">
+        <li>
+          <div class="logo-wrapper">
+
+            <div class="logo-icon">
+              <i class="fas fa-book-open"></i>
+            </div>
+
+            <h2>
+              Domova<span>Kniga</span>
+            </h2>
+
+          </div>  
+        </li>
+        <li>
+          <button class="user-trigger" #userIconRef type="button" (click)="handleUserClick()">
+            <fa-icon [icon]="faUser"></fa-icon>
+            <span class="username" *ngIf="username">{{ username }}</span>
+          </button>
+
+          <div class="dropdown" *ngIf="userDropdownVisible" #userDropdownRef>
+            <ul>
+              <li>Всички адреси</li>
+              <li>
+                <a routerLink="/user-profile">Профил</a>
+              </li>
+              <li (click)="handleSignOut()">Излизане</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
