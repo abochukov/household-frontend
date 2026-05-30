@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { AddressService, Address } from '../../services/address.service';
 import { Property, PropertyService } from '../../services/property.service';
 import { MonthCharges, MonthColumn, TotalSumService, YearlyTotalRow } from '../../services/total-sum.service';
@@ -44,11 +43,13 @@ interface InvoiceRow {
 @Component({
   selector: 'app-invoices',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, AddressListComponent, MonthTabsComponent],
+  imports: [CommonModule, ReactiveFormsModule, AddressListComponent, MonthTabsComponent],
   templateUrl: './invoices.html',
   styleUrls: ['./invoices.css'],
 })
 export class Invoices {
+  private totalSumService = inject(TotalSumService);
+
   addressControl: FormControl<number | null>;
   addresses: Address[] = [];
   selectedAddress: Address | null = null;
@@ -87,7 +88,6 @@ export class Invoices {
     private fb: FormBuilder,
     private addressService: AddressService,
     private propertyService: PropertyService,
-    private totalSumService: TotalSumService,
     private userService: UserService,
     private toastService: ToastService,
   ) {
@@ -402,9 +402,16 @@ export class Invoices {
     }).subscribe({
       next: (result) => {
         this.payingPropertyIds.delete(row.propertyId);
-        this.toastService.showSuccess(
-          result.already_paid ? 'Задължението вече е било платено' : 'Плащането е записано успешно',
-        );
+
+        if (result.already_paid) {
+          this.toastService.showSuccess('Задължението вече е било платено');
+        } else {
+          this.toastService.showSuccess('Плащането е записано успешно');
+          if (!result.email_sent || !result.sms_sent) {
+            this.toastService.showError('Плащането е записано, но част от известията не бяха изпратени');
+          }
+        }
+
         this.loadYearlyTotals();
       },
       error: (error) => {

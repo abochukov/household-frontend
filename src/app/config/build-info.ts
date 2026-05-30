@@ -1,0 +1,1 @@
+export const BUILD_VERSION = 'v0.0.0 (2026-05-25T16:03:25.724Z)';
