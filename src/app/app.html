@@ -1,9 +1,9 @@
 <p-toast position="top-right"></p-toast>
-<app-header *ngIf="!isLoginPage"></app-header>
-<div class="app-container" *ngIf="!isLoginPage">
+<app-header *ngIf="showAppShell"></app-header>
+<div class="app-container" *ngIf="showAppShell">
   <app-sidebar></app-sidebar>
   <div class="content-wrapper">
     <router-outlet></router-outlet>
   </div>
 </div>
-<router-outlet *ngIf="isLoginPage"></router-outlet>
+<router-outlet *ngIf="!showAppShell"></router-outlet>

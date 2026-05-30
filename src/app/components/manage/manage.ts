@@ -34,7 +34,7 @@ export class Manage implements OnInit {
     // Get current user from session
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
-        this.currentUserEmail = user.email;
+        this.currentUserEmail = user.email ?? '';
         this.loadProperties();
         this.loadAddresses();
       },

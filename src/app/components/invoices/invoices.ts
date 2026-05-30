@@ -109,7 +109,7 @@ export class Invoices {
   ngOnInit() {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
-        this.currentUserEmail = user.email;
+        this.currentUserEmail = user.email ?? '';
         this.loadAddresses();
         this.loadProperties();
       },
