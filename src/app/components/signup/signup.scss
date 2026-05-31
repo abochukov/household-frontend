@@ -1,0 +1,20 @@
+@use '../login/login.scss';
+
+.double-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.error-text {
+  display: block;
+  margin: -8px 0 14px;
+  color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .double-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
