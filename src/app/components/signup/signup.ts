@@ -67,11 +67,19 @@ export class Signup implements OnInit {
       .signup({ firstname, lastname, username, email, phone, password })
       .subscribe({
         next: (response) => {
-          this.toastService.showSuccess(response.message, 'Регистрация успешна');
+          this.toastService.showSuccess(
+            'Регистрацията е успешна. Изпратихме имейл за потвърждение. Моля проверете пощата си и потвърдете акаунта.',
+            'Потвърдете имейла си'
+          );
 
           setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 1200);
+            this.router.navigate(['/login'], {
+              queryParams: {
+                registered: '1',
+                email,
+              },
+            });
+          }, 1800);
         },
         error: (error) => {
           const backendMessage = error?.error?.message;

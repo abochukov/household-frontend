@@ -14,6 +14,7 @@ import {
 
 import {
   Router,
+  ActivatedRoute,
   RouterLink
 } from '@angular/router';
 
@@ -58,6 +59,7 @@ export class Login implements OnInit {
   constructor(
     private apiService: ApiServiceTs,
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService
   ) { }
@@ -79,6 +81,27 @@ export class Login implements OnInit {
         Validators.required
       ]
 
+    });
+
+    this.route.queryParamMap.subscribe((params) => {
+      const isRegistered = params.get('registered') === '1';
+      const isVerified = params.get('verified') === '1';
+      const email = params.get('email');
+
+      if (isRegistered) {
+        const emailPart = email ? ` (${email})` : '';
+        this.toastService.showInfo(
+          `Изпратихме имейл за потвърждение${emailPart}. Отворете линка в пощата си, за да активирате акаунта.`,
+          'Провери имейла си'
+        );
+      }
+
+      if (isVerified) {
+        this.toastService.showSuccess(
+          'Имейлът е потвърден успешно. Вече можете да влезете в DomovaKniga.',
+          'Акаунтът е активиран'
+        );
+      }
     });
 
   }
