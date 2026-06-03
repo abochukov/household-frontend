@@ -1,1 +1,1 @@
-export const BUILD_VERSION = 'v0.0.0 (2026-06-01T11:58:11.858Z)';
+export const BUILD_VERSION = 'v0.0.1 (2026-06-01T13:01:54.808Z)';
